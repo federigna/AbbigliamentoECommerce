@@ -18,5 +18,6 @@ namespace AbbigliamentoECommerce.Models
         [Required(AllowEmptyStrings = false, ErrorMessage = "Inserire la password")]
         public string Password { get; set; }
         
+        public User wDetailUser { get; set; }
     }
 }

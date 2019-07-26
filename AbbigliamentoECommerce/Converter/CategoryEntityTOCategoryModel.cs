@@ -11,11 +11,11 @@ namespace AbbigliamentoECommerce.Converter
         public static List<Category> ConvertoListCategoryEntityTOListCategoryModel(List<AbbigliamentoECommerceEntity.Category> pListCat)
         {
             List<Category> wNewListCat = new List<Category>();
-            int i = 1;
+           
             foreach(AbbigliamentoECommerceEntity.Category wSingleCat in pListCat)
             {
                 Category wCat = new Category();
-                wCat.Id = i;
+                wCat.Id = wSingleCat.Description;
                 wCat.Description = wSingleCat.Description;
                 wNewListCat.Add(wCat);
             }

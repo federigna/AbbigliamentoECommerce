@@ -182,19 +182,23 @@ namespace AbbigliamentoECommerceDB
             {
                 allProductsQuery = allProductsQuery.WhereEqualTo("colore", product.colore);
             }
-            QuerySnapshot allProductQuerySnapshot = await allProductsQuery.GetSnapshotAsync();
+            if (product.nome ==null)
+            {
+                product.nome = string.Empty;
+            }
+                QuerySnapshot allProductQuerySnapshot = await allProductsQuery.GetSnapshotAsync();
             foreach (DocumentSnapshot documentSnapshot in allProductQuerySnapshot.Documents.Where(x => x.GetValue<string>("nome").Contains(product.nome)))
             {
                 Product wProd = new Product();
                 wProd.UId = documentSnapshot.Id;
-                wProd.categoria = documentSnapshot.GetValue<string>("categoria");
-                wProd.colore = documentSnapshot.GetValue<string>("colore");
-                wProd.marca = documentSnapshot.GetValue<string>("marca");
-                wProd.nome = documentSnapshot.GetValue<string>("nome");
-                wProd.prezzo = documentSnapshot.GetValue<double>("prezzo");
-                wProd.taglia = documentSnapshot.GetValue<string>("taglia");
-                wProd.UrlDownloadWeb = documentSnapshot.GetValue<string>("UrlDownloadWeb");
-                wProd.descrizione = documentSnapshot.GetValue<string>("descrizione");
+                wProd.categoria = documentSnapshot.ContainsField("categoria") ? documentSnapshot.GetValue<string>("categoria"):"";
+                wProd.colore = documentSnapshot.ContainsField("colore")? documentSnapshot.GetValue<string>("colore"):"";
+                wProd.marca = documentSnapshot.ContainsField("marca") ? documentSnapshot.GetValue<string>("marca") : "";
+                wProd.nome = documentSnapshot.ContainsField("nome") ? documentSnapshot.GetValue<string>("nome") : "";
+                wProd.prezzo = documentSnapshot.ContainsField("prezzo") ? documentSnapshot.GetValue<double>("prezzo") : 0;
+                wProd.taglia = documentSnapshot.ContainsField("taglia") ? documentSnapshot.GetValue<string>("taglia") : "";
+                wProd.UrlDownloadWeb = documentSnapshot.ContainsField("urlDownloadWeb") ? documentSnapshot.GetValue<string>("urlDownloadWeb") : "";
+                wProd.descrizione = documentSnapshot.ContainsField("descrizione") ? documentSnapshot.GetValue<string>("descrizione") : "";
                 wListProd.Add(wProd);
 
 

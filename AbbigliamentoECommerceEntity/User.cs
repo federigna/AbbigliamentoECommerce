@@ -7,7 +7,7 @@ namespace AbbigliamentoECommerceEntity
 {
     public class User
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public string nome { get; set; }
         public string cognome { get; set; }
         public DateTime DateOfBirth { get; set; }

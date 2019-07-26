@@ -119,8 +119,10 @@ namespace AbbigliamentoECommerce.Controllers
                     // TODO: Add insert logic here
                     ProductBL wDB = new ProductBL();
                 
-                    wDB.InsertProduct(ProductEntityToProductModel.ConvertoProdyctEntityTOSearchProductModel(collection), "").Wait();
-                    return View("Home");
+                List<Product> wListProduct= ProductEntityToProductModel.ConvertoListProdyctEntityTOListProductModel( await wDB.GetListProducts(ProductEntityToProductModel.ConvertoProdyctEntityTOSearchProductModel(collection)));
+                TempData["ListProducts"] = wListProduct;
+                
+                return RedirectToAction("Index","Home", collection);
               
             }
             catch (Exception ex)

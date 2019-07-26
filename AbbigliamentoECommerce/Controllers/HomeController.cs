@@ -12,15 +12,15 @@ namespace AbbigliamentoECommerce.Controllers
 {
     public class HomeController : Controller
     {
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(AbbigliamentoECommerce.Models.SearchProduct pProd)
         {
-            SearchProduct wProd = new SearchProduct();
-            wProd.Brands = CategoryEntityTOCategoryModel.ConvertoListCategoryEntityTOListCategoryModel(await new CategoryBL().GetCategory("marca"));
-            wProd.Colors = CategoryEntityTOCategoryModel.ConvertoListCategoryEntityTOListCategoryModel(await new CategoryBL().GetCategory("Colori"));
-            wProd.Categories = CategoryEntityTOCategoryModel.ConvertoListCategoryEntityTOListCategoryModel(await new CategoryBL().GetCategory("Categorie"));
-            wProd.Headmoneies = CategoryEntityTOCategoryModel.ConvertoListCategoryEntityTOListCategoryModel(await new CategoryBL().GetCategory("Taglie"));
-            wProd.Models = CategoryEntityTOCategoryModel.ConvertoListCategoryEntityTOListCategoryModel(await new CategoryBL().GetCategory("Modelli"));
-            return View(wProd);
+            ViewBag.ListProducts = TempData["ListProducts"];
+            pProd.Brands = CategoryEntityTOCategoryModel.ConvertoListCategoryEntityTOListCategoryModel(await new CategoryBL().GetCategory("marca"));
+            pProd.Colors = CategoryEntityTOCategoryModel.ConvertoListCategoryEntityTOListCategoryModel(await new CategoryBL().GetCategory("Colori"));
+            pProd.Categories = CategoryEntityTOCategoryModel.ConvertoListCategoryEntityTOListCategoryModel(await new CategoryBL().GetCategory("Categorie"));
+            pProd.Headmoneies = CategoryEntityTOCategoryModel.ConvertoListCategoryEntityTOListCategoryModel(await new CategoryBL().GetCategory("Taglie"));
+            pProd.Models = CategoryEntityTOCategoryModel.ConvertoListCategoryEntityTOListCategoryModel(await new CategoryBL().GetCategory("Modelli"));
+            return View(pProd);
         }
 
         public ActionResult About()
@@ -47,8 +47,9 @@ namespace AbbigliamentoECommerce.Controllers
                 if (ModelState.IsValid)
                 {
                     UserBL wUserBL = new UserBL();
-                    User wUser =ConvertEntityUserTOUserModel.ConvertoUserEntityTOUserModel( await wUserBL.SigIn(pUser.Email, pUser.Password));
-                    Session["CurrentUser"] = wUser;
+
+                    pUser.wDetailUser =ConvertEntityUserTOUserModel.ConvertoUserEntityTOUserModel( await wUserBL.SigIn(pUser.Email, pUser.Password));
+                    Session["CurrentUser"] = pUser;
                     return View("Index");
                 }else
                 {
