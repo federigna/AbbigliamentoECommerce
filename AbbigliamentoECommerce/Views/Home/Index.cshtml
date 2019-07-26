@@ -1,0 +1,116 @@
+﻿@model AbbigliamentoECommerce.Models.SearchProduct
+@{
+    ViewBag.Title = "Home Page";
+}
+
+
+<div class="row">
+    <fieldset>
+        <legend>Ricerca:</legend>
+        @using (Html.BeginForm("Search", "Product", FormMethod.Post, htmlAttributes: new { @class = "form" }))
+        {
+            <div class="row">
+                <div class="col-md-3">
+
+                    <dl class="dl-horizontal">
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Model)
+                        </dt>
+
+                        <dd>
+                            @Html.DropDownListFor(model => model.Model,
+                                              new SelectList(Model.Models.Select(x => new { Value = x.Description, Text = x.Description }),
+                "Value",
+                "Text", Model.Model),
+                                              "Seleziona Modello")
+                            @Html.ValidationMessageFor(model => model.Model, "", new
+                            {
+                                @class = "text-danger"
+                            })
+                        </dd>
+                        <br />
+                        <dt>
+                            @Html.DisplayNameFor(model => model.ProductName)
+                        </dt>
+
+                        <dd>
+                            @Html.EditorFor(model => model.ProductName,  new
+                                {
+                                    @class = "form-control"
+                                })
+                            @Html.ValidationMessageFor(model => model.ProductName, "", new
+                            {
+                                @class = "text-danger"
+                            })
+                        </dd>
+                    </dl>
+                </div>
+                <div class="col-md-3">
+                    <dl class="dl-horizontal">
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Headmoney)
+                        </dt>
+
+                        <dd>
+                            @Html.DropDownListFor(model => model.Headmoney,
+                                             new SelectList(Model.Headmoneies.Select(x => new { Value = x.Description, Text = x.Description }),
+                "Value",
+                "Text", Model.Headmoney),
+                                             "Seleziona Taglia")
+                            @Html.ValidationMessageFor(model => model.Headmoney, "", new
+                            {
+                                @class = "text-danger"
+                            })
+                        </dd>
+                    </dl>
+                </div>
+                <div class="col-md-3">
+                    <dl class="dl-horizontal">
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Color)
+                        </dt>
+
+                        <dd>
+                            @Html.DropDownListFor(model => model.Color,
+                                             new SelectList(Model.Colors.Select(x => new { Value = x.Description, Text = x.Description }),
+                "Value",
+                "Text", Model.Color),
+                                             "Seleziona Colore")
+                            @Html.ValidationMessageFor(model => model.Color, "", new
+                            {
+                                @class = "text-danger"
+                            })
+                        </dd>
+                        <br />
+                        <dt>
+
+                            @Html.DisplayNameFor(model => model.Brand)
+                        </dt>
+                        
+                        <dd>
+                            @Html.DropDownListFor(model => model.Brand,
+                           new SelectList(
+                Model.Brands.Select(x => new { Value = x.Description, Text = x.Description }),
+                "Value",
+                "Text", Model.Brand),"Seleziona Marca")
+                            @*@Html.DropDownListFor(model => model.Brand,
+            new SelectList(Model.Brands, "Id", "Description"),
+            "Seleziona Marca")*@
+                            @Html.ValidationMessageFor(model => model.Brand, "", new
+                            {
+                                @class = "text-danger"
+                            })
+                        </dd>
+
+
+                    </dl>
+                </div>
+            </div>
+            <p>
+
+                <div class="form-group"> <input type="submit" value="Cerca" class="pull-right" /> </div>
+            </p>
+        }
+    </fieldset>
+</div>

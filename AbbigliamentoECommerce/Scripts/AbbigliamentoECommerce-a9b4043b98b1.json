@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "abbigliamentoecommerce",
+  "private_key_id": "a9b4043b98b19b4bb58307d1af4fd0fb40f97923",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQC91QVFFURUTNKx\n6JuBNpC5Q6Yn/nAW0hDAIakftxvIUvbqo82BTG6TwbbyKGchF6YaKCYHuRG7kPyt\nwa/45fYDorTIZiFw//xTQ0BaMvlvKT+ekrd5HQ3YNXgf8js3k6fqMzYPoYBOaW8w\ndcwuKK1UfRg+i814BfEL0e/A/+Nq/hQsVRVQBV6co9EGvmzFLEiFh9RuA0qqRG2h\ndsmdXXmm6RpO0Nn/HJwrLReKLh97tiKzPC4cur+LO1UpDM9qruL7i7F6akNkkLih\nmUFZxZwSlk2IZLkViqM2dw971iZcjtN3/tA2aGDoLmpwgUVHLh/B0N5KaZRhHv99\nJK1bJkKRAgMBAAECggEACL/8F8yv8zLKg2jO9Vj07GH+rQxzt8zDxbD6tEhV/39t\nFWOqruSjzcVTQwlmhFMsVNUehTycLjxNaU6ENFsx+8W3XFIlntyUK0JUtQbXq65u\nQEdPx0VcXgFMIcZu9FQNNiS/v5JLvh5RNOqffrRhSOoUzZoKeBdnnopB6T0VcaXJ\nwnk+h2NPq+WcwiOUXr2m6p058GX6t0tLxZdMCrVmQQoz6GgW2XtuGJ61vKTRLxLP\n0iCMxsy94Et8TTr6DcAdbzEqGT2DHtRsrnTuOfj97WUs7WvZJSheCRx0m1bcijst\nm4o8J3OUEy0Fptnx8b0YkQ5QM15cQn7m6z1T1yJMAQKBgQDdIaaTMei5oeVsL/jP\nN1WhTk14XXXtw+xDvjWlozUBlgp37Pipa7HGQT6mr9HBU4yotK/09S3ZzG7tuywF\nFTpD4PtAv13f01gw7f3Q3gawh9oT1lVyaiLI1T1XsUyZFqkzZZAL1IPJcU+HEpdk\nNtJPBYtxmtzrATOK+LG8CmxIgwKBgQDbw+srSM2sXl0eN0khskb8wKO8iYIdrFfn\nXzKhGGiomt1mxXAeAIMkfF8fWTH5wmZQ5dafCkTob+dEytISRa21IOuV0KQE9ka9\nsdfsgi9V2R3Kj2rsR3sbnETCP81+iU+JiVx86t1gp5dcQklnqr69GG8UrcXp2DG1\nSPhxwDTUWwKBgEUQvosYunxIIXTR4t8thDQ2VaHzZuLVH5Tk8rKCMAsHxstAG0Yn\nGcY3GI9NOLEuHC+RB6f1b9WnsTnVDOGliKYsvayyWGqRAul9W5oBzosSUz2A4v0y\nQx0A5QDfonHqDvy7iur2/BZNqq4gU2J8cOE3dR8NZFSN8oBEPpbhloJrAoGAVWbh\ncMSuCJnzHdbmOI4LQBWsi4v0YIuk7Wj1R90wbrUf7Nw1IbOZQwiB/rCu1xxQnody\nzAM1nA5AlV8sG6WwR38vjdyyoKsD+puuCV7d/kKNbTYmmwN8N9KWddZNiSrbGduj\ncXfj57e4/kVUOVEFJn7kS+jrzGATkRt2UN4cqZkCgYBL7OY+nO3V+EZRSLgGTpL5\nrjfu/LZhSHdlLJEMTRZjNSdOBikQzSU4tIM8YTjUKZLQjDY8V1DY+XnR+EWJprFV\n8U5GagXxrhm7L1W3KzeusSkexzx1ncl316z20jupt4/MvQFTBVUxgaEzsSwm/H0r\n/2V52IEont8UAMllxDk2nQ==\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-i7mwf@abbigliamentoecommerce.iam.gserviceaccount.com",
+  "client_id": "104588637487636013948",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-i7mwf%40abbigliamentoecommerce.iam.gserviceaccount.com"
+}
