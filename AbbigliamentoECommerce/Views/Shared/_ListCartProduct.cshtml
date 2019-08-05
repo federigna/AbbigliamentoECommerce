@@ -1,0 +1,72 @@
+﻿@using MvcApplication8.Models
+@model IEnumerable<AbbigliamentoECommerce.Models.DetailCart>
+
+@{
+    int pagePrev = ViewBag.PagePrev ?? 0;
+    int pageSucc = ViewBag.PageSucc ?? 4;
+}
+
+@foreach (var item in Model)
+{
+    <br />
+    <fieldset>
+        <div class="row">
+            <div class="col-md-3">
+
+                <dl class="dl-horizontal">
+                    @Html.ActionLink("garbage", "DeleteProduct", "Cart", new { idProduct = item.Product.Id }, new { @class = "garbage" })
+                </dl>
+            </div>
+            <div class="col-md-3">
+
+                <dl class="dl-horizontal">
+                    @Html.Image(item.Product.Image, "alt", "100")
+                </dl>
+            </div>
+            <div class="col-md-3">
+
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.ActionLink(item.Product.ProductName, "Detail", "Product", new { pId = item.Product.Id }, null)
+                    </dt>
+                    <dt>
+                        @Html.DisplayFor(modelItem => item.Product.Price)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(modelItem => item.Product.Description)
+                    </dd>
+                </dl>
+            </div>
+            <div class="col-md-3">
+
+                <dl class="dl-horizontal">
+                    <dt>
+                      Quantità
+                    </dt>
+
+                    <dd>
+                        @Html.DropDownListFor(modelItem => item.Quantity,
+                                            new SelectList(item.Quantities.Select(x => new { Value = x.Key, Text = x.Value }),
+            "Value",
+            "Text", item.Quantity),
+                                            "Seleziona Quantità")
+                        @Html.ValidationMessageFor(modelItem => item.Quantity, "", new
+                       {
+                           @class = "text-danger"
+                       })
+                    </dd>
+
+                </dl>
+            </div>
+        </div>
+        @*@Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.Id })*@
+
+    </fieldset>
+
+}
+@Html.ActionLink("<<", "Search", "Product", new { pPagePrev = pagePrev }, new { @class = "btn btn-default " })||
+@Html.ActionLink(">>", "Search", "Product", new { pPageSucc = pageSucc }, new { @class = "btn btn-default " })
+
+

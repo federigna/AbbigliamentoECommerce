@@ -13,7 +13,7 @@ namespace AbbigliamentoECommerce.Models
         public string ProductName { get; set; }
         //quantità disponibile
         [Display(Name = "Quantità Disponibile")]
-        [RegularExpression(@"[1-9]$", ErrorMessage = "Prezzo non valido.")]
+        [RegularExpression(@"[1-9]$", ErrorMessage = "Quantità non valido.")]
         [Required(AllowEmptyStrings = false, ErrorMessage = "Inserire la quantità")]
         public int Quantity { get; set; }
         [Display(Name = "Colore")]
