@@ -5,7 +5,7 @@ using System.Web;
 
 namespace AbbigliamentoECommerce.Models
 {
-    public class Category:BaseClass
+    public class Category:BaseClass 
     {
        
     }
