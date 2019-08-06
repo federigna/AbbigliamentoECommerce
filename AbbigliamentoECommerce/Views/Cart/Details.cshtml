@@ -1,0 +1,23 @@
+﻿@model AbbigliamentoECommerce.Models.Cart
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>CartDetail</h2>
+
+<div>
+    <h4>Cart</h4>
+    <hr />
+
+    @if (Model.DetailsCart.Count > 0)
+    {
+        @Html.Partial("_ListCartProduct", Model.DetailsCart)
+    }
+    Costo Spedizione : <b>@Model.ShippingCost $</b>
+    Totale : <b>@Model.TotalPrice $</b>
+</div>
+
+<p>
+    @Html.ActionLink("Acquista", "PaymentWithPaypal", "Cart", new { userId = Model.UserOwner.Id }, new { @class = "btn btn-default pull-right" })
+</p>

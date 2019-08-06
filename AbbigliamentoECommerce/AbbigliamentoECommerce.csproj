@@ -301,6 +301,7 @@
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\LoggedUser.cs" />
     <Compile Include="Models\User.cs" />
+    <Compile Include="PaypalConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -429,8 +430,8 @@
     <Content Include="Views\Product\Edit.cshtml" />
     <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\Shared\_ListProduct.cshtml" />
-    <Content Include="Views\Cart\CartDetail.cshtml" />
     <Content Include="Views\Shared\_ListCartProduct.cshtml" />
+    <Content Include="Views\Cart\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

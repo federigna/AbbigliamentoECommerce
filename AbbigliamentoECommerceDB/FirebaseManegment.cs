@@ -182,17 +182,17 @@ namespace AbbigliamentoECommerceDB
             {
                 allProductsQuery = allProductsQuery.WhereEqualTo("colore", product.colore);
             }
-            if (product.nome ==null)
+            if (product.nome == null)
             {
                 product.nome = string.Empty;
             }
-                QuerySnapshot allProductQuerySnapshot = await allProductsQuery.GetSnapshotAsync();
+            QuerySnapshot allProductQuerySnapshot = await allProductsQuery.GetSnapshotAsync();
             foreach (DocumentSnapshot documentSnapshot in allProductQuerySnapshot.Documents.Where(x => x.GetValue<string>("nome").Contains(product.nome)))
             {
                 Product wProd = new Product();
                 wProd.UId = documentSnapshot.Id;
-                wProd.categoria = documentSnapshot.ContainsField("categoria") ? documentSnapshot.GetValue<string>("categoria"):"";
-                wProd.colore = documentSnapshot.ContainsField("colore")? documentSnapshot.GetValue<string>("colore"):"";
+                wProd.categoria = documentSnapshot.ContainsField("categoria") ? documentSnapshot.GetValue<string>("categoria") : "";
+                wProd.colore = documentSnapshot.ContainsField("colore") ? documentSnapshot.GetValue<string>("colore") : "";
                 wProd.marca = documentSnapshot.ContainsField("marca") ? documentSnapshot.GetValue<string>("marca") : "";
                 wProd.nome = documentSnapshot.ContainsField("nome") ? documentSnapshot.GetValue<string>("nome") : "";
                 wProd.prezzo = documentSnapshot.ContainsField("prezzo") ? documentSnapshot.GetValue<double>("prezzo") : 0;
@@ -274,6 +274,69 @@ namespace AbbigliamentoECommerceDB
             }
             return wListProd;
         }
+
+        public async Task<Cart> GetCartByUser(string userId)
+        {
+            FirestoreDb db = CreateInstanceDB();
+
+            var appSettings = ConfigurationManager.AppSettings;
+            string wApiKey = appSettings["FirebaseApiKey"] ?? "Not Found";
+            var authProvider = new FirebaseAuthProvider(new FirebaseConfig(wApiKey));
+            AbbigliamentoECommerceEntity.Cart wCart = new AbbigliamentoECommerceEntity.Cart();
+          
+            wCart.listProduct = new List<CartDetail>();
+            try
+            {
+
+                //Effettuo la login tramite email e password
+                //FirebaseAuthLink auth = await authProvider.SignInWithEmailAndPasswordAsync(pEmail, pPassword);
+
+                //recupero del uid utente per recuperare tutte le info del'utente loggato
+                //var decoded = await FirebaseAdmin.Auth.FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(auth.FirebaseToken);
+                //var uid = decoded.Uid;
+                DocumentReference wDocRef = db.Collection("users").Document(userId);
+
+                DocumentSnapshot snapshot = await wDocRef.GetSnapshotAsync();
+                if (snapshot.Exists)
+                {
+                    AbbigliamentoECommerceEntity.Carrello[] wCartArray = snapshot.ContainsField("carrello") ? snapshot.GetValue<Carrello[]>("carrello") : null;
+                    if (wCartArray != null)
+                    {
+                        foreach (Carrello wCartDB in wCartArray)
+                        {
+
+                            DocumentReference wDocRefProd = db.Collection("prodotto").Document(wCartDB.uidProdotto);
+                            DocumentSnapshot snapshotProd = await wDocRefProd.GetSnapshotAsync();
+                            if (snapshotProd.Exists)
+                            {
+                                AbbigliamentoECommerceEntity.CartDetail wCartDetail = new AbbigliamentoECommerceEntity.CartDetail();
+                                Product wProd = new Product();
+                                wProd.UId = snapshotProd.Id;
+                                wProd.categoria = snapshotProd.ContainsField("categoria") ? snapshotProd.GetValue<string>("categoria") : "";
+                                wProd.colore = snapshotProd.ContainsField("colore") ? snapshotProd.GetValue<string>("colore") : "";
+                                wProd.marca = snapshotProd.ContainsField("marca") ? snapshotProd.GetValue<string>("marca") : "";
+                                wProd.nome = snapshotProd.ContainsField("nome") ? snapshotProd.GetValue<string>("nome") : "";
+                                wProd.prezzo = snapshotProd.ContainsField("prezzo") ? snapshotProd.GetValue<double>("prezzo") : 0;
+                                wProd.taglia = snapshotProd.ContainsField("taglia") ? snapshotProd.GetValue<string>("taglia") : "";
+                                wProd.UrlDownloadWeb = snapshotProd.ContainsField("urlDownloadWeb") ? snapshotProd.GetValue<string>("urlDownloadWeb") : "";
+                                wProd.descrizione = snapshotProd.ContainsField("descrizione") ? snapshotProd.GetValue<string>("descrizione") : "";
+                                wCartDetail.quantita = wCartDB.quantita;
+                                wCartDetail.singleProduct = wProd;
+                                wCart.listProduct.Add(wCartDetail);
+                            }
+                        }
+                    }
+                }
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            return wCart;
+        }
+
 
         public async Task<AbbigliamentoECommerceEntity.User> SignIn(string pEmail, string pPassword)
         {
