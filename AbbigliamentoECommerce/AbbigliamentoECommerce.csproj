@@ -285,6 +285,7 @@
     <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="Controllers\StatisticController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Converter\CategoryEntityTOCategoryModel.cs" />
     <Compile Include="Converter\ConvertEntityUserTOUserModel.cs" />
@@ -314,6 +315,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Images\Cart.png" />
     <Content Include="Images\garbage.png" />
     <Content Include="Images\LogoApp.png" />
     <Content Include="Images\LogoApp64x64.png" />
@@ -432,6 +434,7 @@
     <Content Include="Views\Shared\_ListProduct.cshtml" />
     <Content Include="Views\Shared\_ListCartProduct.cshtml" />
     <Content Include="Views\Cart\Details.cshtml" />
+    <Content Include="Views\Statistic\ViewStatistic.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
