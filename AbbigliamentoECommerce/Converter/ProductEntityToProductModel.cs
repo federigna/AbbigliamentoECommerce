@@ -51,9 +51,23 @@ namespace AbbigliamentoECommerce.Converter
                 wProduct.Image = pProduct.UrlDownloadWeb;
                 wListProduct.Add(wProduct);
             }
-            
+
 
             return wListProduct;
+        }
+
+        public static AbbigliamentoECommerce.Models.Product ConvertoProdyctEntityTOProductModel(AbbigliamentoECommerceEntity.Product pProduct)
+        {
+            AbbigliamentoECommerce.Models.Product wProduct = new AbbigliamentoECommerce.Models.Product();
+            wProduct.Id = pProduct.UId;
+            wProduct.Category = pProduct.categoria;
+            wProduct.Color = pProduct.colore;
+            wProduct.Brand = pProduct.marca;
+            wProduct.ProductName = pProduct.nome;
+            wProduct.Price = pProduct.prezzo;
+            wProduct.Headmoney = pProduct.taglia;
+            wProduct.Image = pProduct.UrlDownloadWeb;
+            return wProduct;
         }
 
     }

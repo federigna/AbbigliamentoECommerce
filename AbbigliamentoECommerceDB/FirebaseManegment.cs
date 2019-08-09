@@ -350,7 +350,7 @@ namespace AbbigliamentoECommerceDB
 
                 //Effettuo la login tramite email e password
                 FirebaseAuthLink auth = await authProvider.SignInWithEmailAndPasswordAsync(pEmail, pPassword);
-
+                
                 //recupero del uid utente per recuperare tutte le info del'utente loggato
                 var decoded = await FirebaseAdmin.Auth.FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(auth.FirebaseToken);
                 var uid = decoded.Uid;
@@ -369,6 +369,24 @@ namespace AbbigliamentoECommerceDB
                 throw;
             }
             return wUser;
+        }
+
+        public  void SignOut()
+        {
+            FirestoreDb db = CreateInstanceDB();
+            AbbigliamentoECommerceEntity.User wUser = new AbbigliamentoECommerceEntity.User();
+            var appSettings = ConfigurationManager.AppSettings;
+            string wApiKey = appSettings["FirebaseApiKey"] ?? "Not Found";
+            var authProvider = new FirebaseAuthProvider(new FirebaseConfig(wApiKey));
+            try
+            {
+                
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
     }
 

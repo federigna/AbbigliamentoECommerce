@@ -32,6 +32,13 @@ namespace AbbigliamentoECommerce.Controllers
 
         public async Task<ActionResult> Login()
         {
+            
+            Session["CurrentUser"] = null;
+            return View("Index");
+        }
+
+        public async Task<ActionResult> Logout()
+        {
 
             LoggedUser wUser = new LoggedUser();
             return View(wUser);

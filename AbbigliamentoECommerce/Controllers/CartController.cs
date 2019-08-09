@@ -1,7 +1,11 @@
-﻿using PayPal.Api;
+﻿using AbbigliamentoECommerce.Converter;
+using AbbigliamentoECommerce.Models;
+using AbbigliamentoECommerceBL;
+using PayPal.Api;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -9,6 +13,7 @@ namespace AbbigliamentoECommerce.Controllers
 {
     public class CartController : Controller
     {
+        public LoggedUser wLogUser = null;
         // GET: Cart
         public ActionResult Index()
         {
@@ -16,9 +21,11 @@ namespace AbbigliamentoECommerce.Controllers
         }
 
         // GET: Cart/Details/5
-        public ActionResult Details(int id)
+        public async Task<ActionResult> Details()
         {
-            return View();
+            wLogUser = (LoggedUser)Session["CurrentUser"];
+            Cart wCart=  ConvertEntityUserTOUserModel.ConvertoCartEntityTOCartModel( await new CartBL().GetCartByUser(wLogUser.wDetailUser.Id));
+            return View(wCart);
         }
 
         // GET: Cart/Create
@@ -87,13 +94,14 @@ namespace AbbigliamentoECommerce.Controllers
             }
         }
 
-        public ActionResult PaymentWithPaypal(string userId, string Cancel = null)
+        public async Task<ActionResult> PaymentWithPaypal(string userId, string Cancel = null)
         {
             //getting the apiContext
             APIContext apiContext = PaypalConfiguration.GetAPIContext();
 
             try
             {
+               
                 //A resource representing a Payer that funds a payment Payment Method as paypal
                 //Payer Id will be returned when payment proceeds or click to pay
                 string payerId = Request.Params["PayerID"];
@@ -115,8 +123,8 @@ namespace AbbigliamentoECommerce.Controllers
 
                     //CreatePayment function gives us the payment approval url
                     //on which payer is redirected for paypal account payment
-
-                    var createdPayment = this.CreatePayment(apiContext, baseURI + "guid=" + guid);
+                   Cart wCart  = ConvertEntityUserTOUserModel.ConvertoCartEntityTOCartModel(await new CartBL().GetCartByUser(wLogUser.wDetailUser.Id));
+                    var createdPayment = this.CreatePayment(apiContext, baseURI + "guid=" + guid,wCart);
 
                     //get links returned from paypal in response to Create function call
 
@@ -173,22 +181,24 @@ namespace AbbigliamentoECommerce.Controllers
             return this.payment.Execute(apiContext, paymentExecution);
         }
 
-        private Payment CreatePayment(APIContext apiContext, string redirectUrl)
+        private  Payment CreatePayment(APIContext apiContext, string redirectUrl, Cart pCart)
         {
-
             //create itemlist and add item objects to it
             var itemList = new ItemList() { items = new List<Item>() };
 
-            //Adding Item Details like name, currency, price etc
-            itemList.items.Add(new Item()
+            foreach (DetailCart wDetail in pCart.DetailsCart)
             {
-                name = "Item Name comes here",
-                currency = "USD",
-                price = "1",
-                quantity = "1",
-                sku = "sku"
-            });
+                //Adding Item Details like name, currency, price etc
+                itemList.items.Add(new Item()
+                {
+                    name = wDetail.Product.ProductName,
+                    currency = "USD",
+                    price = wDetail.Product.Price.ToString(),
+                    quantity = wDetail.Product.QuantityBuy.ToString(),
+                    sku = "sku"
+                });
 
+            }
             var payer = new Payer() { payment_method = "paypal" };
 
             // Configure Redirect Urls here with RedirectUrls object
@@ -201,16 +211,16 @@ namespace AbbigliamentoECommerce.Controllers
             // Adding Tax, shipping and Subtotal details
             var details = new Details()
             {
-                tax = "1",
-                shipping = "1",
-                subtotal = "1"
+                tax = pCart.Vat.ToString(),
+                shipping =pCart.ShippingCost.ToString(),
+                subtotal =pCart.TotalPrice.ToString()
             };
 
             //Final amount with details
             var amount = new Amount()
             {
                 currency = "USD",
-                total = "3", // Total must be equal to sum of tax, shipping and subtotal.
+                total = details.tax + details.shipping + details.subtotal, // Total must be equal to sum of tax, shipping and subtotal.
                 details = details
             };
 

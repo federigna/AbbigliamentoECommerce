@@ -6581,6 +6581,13 @@ a.GarbageBtn {
     height: 16px;
     text-indent: -9999px; /* hides the link text */
 }
+a.CartBtn {
+    background: url(../Images/Cart.png) no-repeat top left;
+    display: block;
+    width: 20px;
+    height: 16;
+    text-indent: -9999px; /* hides the link text */
+}
 @media (max-width: 767px) {
   .visible-xs {
     display: block !important;
