@@ -388,6 +388,31 @@ namespace AbbigliamentoECommerceDB
                 throw;
             }
         }
+
+        public async Task<ResultStatics> StatisticsResult(FilterStatics pFilter, string pTableName)
+        {
+            FirebaseApp wApp = CreateFirebaseApp();
+            FirestoreDb db = CreateInstanceDB();
+            Query allProductsQuery = db.Collection(pTableName);
+            QuerySnapshot allProductQuerySnapshot = await allProductsQuery.GetSnapshotAsync();
+            foreach (DocumentSnapshot documentSnapshot in allProductQuerySnapshot.Documents)
+            {
+                if (documentSnapshot.Exists)
+                {
+
+                    Category wProd = new Category();
+                    wProd.Id = documentSnapshot.Id;
+                    wProd.Description = documentSnapshot.Id;
+                   
+
+                }
+                else
+                {
+
+                }
+            }
+            return null;
+        }
     }
 
 }
