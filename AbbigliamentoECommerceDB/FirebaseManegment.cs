@@ -79,6 +79,7 @@ namespace AbbigliamentoECommerceDB
                     { "cognome",pUser.cognome },
                     { "nome",pUser.nome },
                     { "TelefoneNumber",pUser.TelefoneNumber },
+                    { "Ruolo","Cliente" },
                 };
             WriteResult wWResult = await wDocRef.SetAsync(wDictionaryUser);
 

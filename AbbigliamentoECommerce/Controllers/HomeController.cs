@@ -34,8 +34,11 @@ namespace AbbigliamentoECommerce.Controllers
         {
             
             Session["CurrentUser"] = null;
-            return View("Index");
+            LoggedUser wLoggedUser = new LoggedUser();
+            return View("Login",wLoggedUser);
         }
+
+      
 
         public async Task<ActionResult> Logout()
         {

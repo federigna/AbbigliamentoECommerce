@@ -13,13 +13,27 @@
         <div class="container">
             <div class="navbar-header">
 
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li>
+                            @Html.ActionLink("HomeBtn", "Index", "Home", new { area = "" }, new { @class = "HomeBtn" })
+                        </li>
+                        @if (Session["CurrentUser"] != null && Session["Ruolo"].ToString() == "BackOffice")
+                        {
+                            <li class="dropdown">
 
-                </button>
-                @Html.ActionLink("HomeBtn", "Index", "Home", new { area = "" }, new { @class = "HomeBtn" })
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Statistiche<span class="caret"></span></a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a href="#">@Html.ActionLink("Prodotto più venduto", "BestSellingProduct", "Statistic")</a></li>
+                                    <li><a href="#">@Html.ActionLink("Marca più venduto", "BestSellingBrand", "Statistic")</a></li>
+                                    <li><a href="#">@Html.ActionLink("Incasso per categoria", "GainByCategory", "Statistic")</a></li>
+                                    <li><a href="#">@Html.ActionLink("Inserisci Prodotto", "Create", "Product")</a></li>
+                                </ul>
+                            </li>
+                        }
+                    </ul>
+                </div><!-- /.navbar-collapse -->
+
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">

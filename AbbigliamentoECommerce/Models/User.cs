@@ -43,5 +43,6 @@ namespace AbbigliamentoECommerce.Models
         [DataType(DataType.Password)]
         [Required(AllowEmptyStrings = false, ErrorMessage = "Inserire la conferma password")]
         public string ConfirmePassword { get; set; }
+        public string Ruolo { get; set; }
     }
 }

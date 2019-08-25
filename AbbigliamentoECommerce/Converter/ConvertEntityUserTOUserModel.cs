@@ -19,6 +19,7 @@ namespace AbbigliamentoECommerce.Converter
             wUser.Id = pUser.Id;
             wUser.Name = pUser.nome;
             wUser.Surname = pUser.cognome;
+            wUser.Ruolo = pUser.Ruolo;
             return wUser;
         }
 
@@ -51,6 +52,7 @@ namespace AbbigliamentoECommerce.Converter
             wUser.DateOfBirth = collection.DateOfBirth;
             wUser.District = collection.District;
             wUser.TelefoneNumber = collection.TelefoneNumber;
+            wUser.Ruolo = collection.Ruolo;
             return wUser;
         }
     }
