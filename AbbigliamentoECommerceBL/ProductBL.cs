@@ -23,5 +23,12 @@ namespace AbbigliamentoECommerceBL
             List<Product> wListProd= await wDB.GetProducts(pProduct,0);
             return wListProd;
         }
+
+        public async Task<Product> GetProduct(string pId)
+        {
+            FirebaseManegment wDB = new FirebaseManegment();
+            Product wProd = await wDB.GetProductById(pId);
+            return wProd;
+        }
     }
 }

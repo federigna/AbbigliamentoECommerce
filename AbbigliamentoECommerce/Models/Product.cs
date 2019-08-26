@@ -59,14 +59,8 @@ namespace AbbigliamentoECommerce.Models
         public int QuantityBuy { get; set; }
         public Dictionary<int, int> ListQuantity
         {
-            get
-            {
-                for (int i = 0; i < this.Quantity; i++)
-                {
-                    this.ListQuantity.Add(i, i);
-                }
-                return this.ListQuantity;
-            }
+            set;
+            get;
         }
     }
 }

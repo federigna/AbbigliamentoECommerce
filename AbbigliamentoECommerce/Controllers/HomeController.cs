@@ -20,7 +20,7 @@ namespace AbbigliamentoECommerce.Controllers
             pProd.Categories = CategoryEntityTOCategoryModel.ConvertoListCategoryEntityTOListCategoryModel(await new CategoryBL().GetCategory("Categorie"));
             pProd.Headmoneies = CategoryEntityTOCategoryModel.ConvertoListCategoryEntityTOListCategoryModel(await new CategoryBL().GetCategory("Taglie"));
             pProd.Models = CategoryEntityTOCategoryModel.ConvertoListCategoryEntityTOListCategoryModel(await new CategoryBL().GetCategory("Modelli"));
-            return View(pProd);
+            return View("Index",pProd);
         }
 
         public ActionResult About()
@@ -42,9 +42,9 @@ namespace AbbigliamentoECommerce.Controllers
 
         public async Task<ActionResult> Logout()
         {
-
-            LoggedUser wUser = new LoggedUser();
-            return View(wUser);
+            Session["CurrentUser"] = null;
+            Session["Ruolo"] = null;
+            return await Index(new SearchProduct());
         }
 
         [HttpPost]
@@ -60,7 +60,8 @@ namespace AbbigliamentoECommerce.Controllers
 
                     pUser.wDetailUser =ConvertEntityUserTOUserModel.ConvertoUserEntityTOUserModel( await wUserBL.SigIn(pUser.Email, pUser.Password));
                     Session["CurrentUser"] = pUser;
-                    return View("Index");
+                    Session["Ruolo"] = pUser.wDetailUser.Ruolo;
+                    return await Index(new SearchProduct ());
                 }else
                 {
                     return View(pUser);

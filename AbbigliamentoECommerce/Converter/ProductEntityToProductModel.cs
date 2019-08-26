@@ -22,6 +22,25 @@ namespace AbbigliamentoECommerce.Converter
             wProduct.UrlDownloadWeb = pProduct.Image;
             return wProduct;
         }
+        public static AbbigliamentoECommerce.Models.Product ConvertoProdyctModelTOProductEntity(AbbigliamentoECommerceEntity.Product pProduct)
+        {
+            AbbigliamentoECommerce.Models.Product wProduct = new AbbigliamentoECommerce.Models.Product();
+            wProduct.Id = pProduct.UId;
+            wProduct.Category = pProduct.categoria;
+            wProduct.Color = pProduct.colore;
+            wProduct.Brand = pProduct.marca;
+            wProduct.ProductName = pProduct.nome;
+            wProduct.Price = pProduct.prezzo;
+            wProduct.Quantity = pProduct.Quantity;
+            wProduct.Headmoney = pProduct.taglia;
+            wProduct.Image = pProduct.UrlDownloadWeb;
+            wProduct.ListQuantity = new Dictionary<int, int>();
+            for (int i = 0; i < wProduct.Quantity; i++)
+            {
+                wProduct.ListQuantity.Add(i, i);
+            }
+            return wProduct;
+        }
 
         public static AbbigliamentoECommerceEntity.Product ConvertoProdyctEntityTOSearchProductModel(AbbigliamentoECommerce.Models.SearchProduct pProduct)
         {

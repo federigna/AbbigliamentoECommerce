@@ -96,6 +96,9 @@
     @Html.ActionLink("Aggiungi al Carrello", "AddCart", "Cart", null, new { @class = "btn btn-login pull-right" })
 </div>
 <p>
-    @Html.ActionLink("Cancella Prodotto", "Delete", "Product", null, new { @class = "btn btn-login pull-right" })
-    @Html.ActionLink("Modifica Prodotto", "Edit", "Product", new { pId=Model.Id}, new { @class = "btn btn-login pull-right" })
-</p>
+    @if (Session["Ruolo"] != null && Session["Ruolo"].ToString() == "BackOffice")
+    {
+        @Html.ActionLink("Cancella Prodotto", "Delete", "Product", null, new { @class = "btn btn-login pull-right" })
+        @Html.ActionLink("Modifica Prodotto", "Edit", "Product", new { pId = Model.Id }, new { @class = "btn btn-login pull-right" })
+    }
+    </p>

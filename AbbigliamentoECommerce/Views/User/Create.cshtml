@@ -165,7 +165,7 @@
             </div>
         </div>
         <p>
-            @if (Model.Id != 0)
+            @if (Model.Id != "")
             {
                 Html.ActionLink("Edit", "Edit", new { id = Model.Id });
             }

@@ -42,5 +42,8 @@
 @Html.ActionLink("<<", "Search", "Product", new { pPagePrev = pagePrev }, new { @class = "btn btn-default " })||
 @Html.ActionLink(">>", "Search", "Product", new { pPageSucc = pageSucc }, new { @class = "btn btn-default " })
 
-@Html.ActionLink("Aggiungi Prodotto", "Create", "Product", null, new { @class = "btn btn-default pull-right" })
+@if (Session["Ruolo"] != null && Session["Ruolo"].ToString() == "BackOffice")
+{
+    @Html.ActionLink("Aggiungi Prodotto", "Create", "Product", null, new { @class = "btn btn-default pull-right" })
+}
 

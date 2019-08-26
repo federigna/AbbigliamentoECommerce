@@ -19,9 +19,11 @@ namespace AbbigliamentoECommerce.Controllers
         }
 
         // GET: Product/Details/5
-        public ActionResult Details(int id)
+        public async Task<ActionResult> Detail(string pId)
         {
-            return View();
+            Product wProd = new Product();
+            wProd=ProductEntityToProductModel.ConvertoProdyctModelTOProductEntity(await new ProductBL().GetProduct(pId));
+            return View(wProd);
         }
 
         // GET: Product/Create
