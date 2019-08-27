@@ -1,7 +1,9 @@
 ﻿@model AbbigliamentoECommerce.Models.Product
-
+@using MvcApplication8.Models
 @{
     ViewBag.Title = "Details";
+    string IdUser = (AbbigliamentoECommerce.Models.LoggedUser)Session["CurrentUser"] != null ? ((AbbigliamentoECommerce.Models.LoggedUser)Session["CurrentUser"]).wDetailUser.Id : "";
+    string wScriptDetail = ViewBag.ScriptDetail;
 }
 
 <h2>Details</h2>
@@ -9,96 +11,114 @@
 <div>
     <h4>Product</h4>
     <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
+    <div class="row">
+        <div class="col-md-3">
+            <dl class="dl-horizontal">
+                @Html.Image(Model.Image, "alt", "100")
+            </dl>
+        </div>
+        <div class="col-md-3">
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.Description)
+                </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
+                <dd>
+                    @Html.DisplayFor(model => model.Description)
+                </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.ProductName)
-        </dt>
+                <dt>
+                    @Html.DisplayNameFor(model => model.ProductName)
+                </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.ProductName)
-        </dd>
+                <dd>
+                    @Html.DisplayFor(model => model.ProductName)
+                </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Quantity)
-        </dt>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Quantity)
+                </dt>
 
-        <dd>
-            @Html.DropDownListFor(model => model.QuantityBuy, new SelectList(Model.ListQuantity.Select(x => new { Value = x.Key, Text = x.Value }),
-        "Value",
-        "Text", Model.QuantityBuy))
-        </dd>
+                <dd>
+                    @Html.DropDownListFor(model => model.QuantityBuy, new SelectList(Model.ListQuantity.Select(x => new { Value = x.Key, Text = x.Value }),
+         "Value",
+         "Text", Model.QuantityBuy))
+                </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Color)
-        </dt>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Color)
+                </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Color)
-        </dd>
+                <dd>
+                    @Html.DisplayFor(model => model.Color)
+                </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Brand)
-        </dt>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Brand)
+                </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Brand)
-        </dd>
+                <dd>
+                    @Html.DisplayFor(model => model.Brand)
+                </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Headmoney)
-        </dt>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Headmoney)
+                </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Headmoney)
-        </dd>
+                <dd>
+                    @Html.DisplayFor(model => model.Headmoney)
+                </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Model)
-        </dt>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Model)
+                </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Model)
-        </dd>
+                <dd>
+                    @Html.DisplayFor(model => model.Model)
+                </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Category)
-        </dt>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Category)
+                </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Category)
-        </dd>
+                <dd>
+                    @Html.DisplayFor(model => model.Category)
+                </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Price)
-        </dt>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Price)
+                </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Price)
-        </dd>
+                <dd>
+                    @Html.DisplayFor(model => model.Price)
+                </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Image)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Image)
-        </dd>
-
-    </dl>
-    @Html.ActionLink("Aggiungi al Carrello", "AddCart", "Cart", null, new { @class = "btn btn-login pull-right" })
+            </dl>
+        </div>
+    </div>
+    @Html.ActionLink("Aggiungi al Carrello", "AddCart", "Product", new { pId = Model.Id, pQuantityBy= Model.QuantityBuy }, new { @class = "btn btn-login pull-right", onclick = "return IsLoggedUser();" })
 </div>
+
 <p>
     @if (Session["Ruolo"] != null && Session["Ruolo"].ToString() == "BackOffice")
     {
-        @Html.ActionLink("Cancella Prodotto", "Delete", "Product", null, new { @class = "btn btn-login pull-right" })
+        @Html.ActionLink("Cancella Prodotto", "Delete", "Product", new { pId = Model.Id }, new { @class = "btn btn-login pull-right" })
         @Html.ActionLink("Modifica Prodotto", "Edit", "Product", new { pId = Model.Id }, new { @class = "btn btn-login pull-right" })
     }
-    </p>
+</p>
+
+<script>
+    
+    (function () {
+         if ('@wScriptDetail' != '') {
+            alert('@wScriptDetail');
+        }
+    })();
+    function IsLoggedUser() {
+        if ('@IdUser'== '') {
+            alert("Per agiungere un elemento al carello è necessario essere loggati");
+            return false;
+        }
+        return true;
+    }
+</script>

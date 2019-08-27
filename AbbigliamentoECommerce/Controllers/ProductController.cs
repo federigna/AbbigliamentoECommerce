@@ -19,18 +19,25 @@ namespace AbbigliamentoECommerce.Controllers
         }
 
         // GET: Product/Details/5
-        public async Task<ActionResult> Detail(string pId)
+        public async Task<ActionResult> Detail(string pId, string pScript = "")
         {
             Product wProd = new Product();
-            wProd=ProductEntityToProductModel.ConvertoProdyctModelTOProductEntity(await new ProductBL().GetProduct(pId));
-            return View(wProd);
+            wProd = ProductEntityToProductModel.ConvertoProdyctModelTOProductEntity(await new ProductBL().GetProduct(pId));
+            ViewBag.ScriptDetail = pScript; 
+            return View("Detail", wProd);
         }
 
+        public async Task<ActionResult> AddCart(string pId, int pQuantityBy)
+        {
+           LoggedUser wLogUser = (LoggedUser)Session["CurrentUser"];
+            await new CartBL().AddProductToCart(wLogUser.wDetailUser.Id, pId, pQuantityBy);
+            return await Detail(pId, "Prodotto aggiunto al carrello.");
+        }
         // GET: Product/Create
         public async Task<ActionResult> Create()
         {
             Product wProd = new Product();
-            wProd.Brands =CategoryEntityTOCategoryModel.ConvertoListCategoryEntityTOListCategoryModel( await new CategoryBL().GetCategory("marca"));
+            wProd.Brands = CategoryEntityTOCategoryModel.ConvertoListCategoryEntityTOListCategoryModel(await new CategoryBL().GetCategory("marca"));
             wProd.Colors = CategoryEntityTOCategoryModel.ConvertoListCategoryEntityTOListCategoryModel(await new CategoryBL().GetCategory("Colori"));
             wProd.Categories = CategoryEntityTOCategoryModel.ConvertoListCategoryEntityTOListCategoryModel(await new CategoryBL().GetCategory("Categorie"));
             wProd.Headmoneies = CategoryEntityTOCategoryModel.ConvertoListCategoryEntityTOListCategoryModel(await new CategoryBL().GetCategory("Taglie"));
@@ -38,7 +45,7 @@ namespace AbbigliamentoECommerce.Controllers
             return View(wProd);
         }
 
-       
+
         [HttpPost]
         public async Task<ActionResult> Create(Product collection)
         {
@@ -48,8 +55,8 @@ namespace AbbigliamentoECommerce.Controllers
                 {
                     // TODO: Add insert logic here
                     ProductBL wDB = new ProductBL();
-                   
-                    wDB.InsertProduct(ProductEntityToProductModel.ConvertoProdyctEntityTOProductModel(collection),"").Wait();
+
+                    wDB.InsertProduct(ProductEntityToProductModel.ConvertoProdyctEntityTOProductModel(collection), "").Wait();
                     return RedirectToAction("Home");
                 }
                 else
@@ -117,15 +124,15 @@ namespace AbbigliamentoECommerce.Controllers
         {
             try
             {
-                
-                    // TODO: Add insert logic here
-                    ProductBL wDB = new ProductBL();
-                
-                List<Product> wListProduct= ProductEntityToProductModel.ConvertoListProdyctEntityTOListProductModel( await wDB.GetListProducts(ProductEntityToProductModel.ConvertoProdyctEntityTOSearchProductModel(collection)));
+
+                // TODO: Add insert logic here
+                ProductBL wDB = new ProductBL();
+
+                List<Product> wListProduct = ProductEntityToProductModel.ConvertoListProdyctEntityTOListProductModel(await wDB.GetListProducts(ProductEntityToProductModel.ConvertoProdyctEntityTOSearchProductModel(collection)));
                 TempData["ListProducts"] = wListProduct;
-                
-                return RedirectToAction("Index","Home", collection);
-              
+
+                return RedirectToAction("Index", "Home", collection);
+
             }
             catch (Exception ex)
             {

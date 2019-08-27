@@ -238,9 +238,11 @@ namespace AbbigliamentoECommerceDB
             //GetData
             DocumentReference wDocRef = db.Collection("user").Document(pUserUId);
             DocumentSnapshot snapshot = await wDocRef.GetSnapshotAsync();
+            Dictionary<string, object> wMapCart = new Dictionary<string, object>();
+            wMapCart.Add("quanita", pQuantitySelect);
+            wMapCart.Add("uidProdotto", pProduct.UId);
 
-
-            WriteResult wWResult = await wDocRef.UpdateAsync("carrello", FieldValue.ArrayUnion(pProduct.UId));
+            WriteResult wWResult = await wDocRef.UpdateAsync("carrello", FieldValue.ArrayUnion(wMapCart));
 
             //End get Data
 
