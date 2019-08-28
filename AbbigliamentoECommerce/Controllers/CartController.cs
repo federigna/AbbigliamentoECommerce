@@ -24,8 +24,9 @@ namespace AbbigliamentoECommerce.Controllers
         public async Task<ActionResult> Details()
         {
             wLogUser = (LoggedUser)Session["CurrentUser"];
-            Cart wCart=  ConvertEntityUserTOUserModel.ConvertoCartEntityTOCartModel( await new CartBL().GetCartByUser(wLogUser.wDetailUser.Id));
-            return View(wCart);
+            Cart wCart = ConvertEntityUserTOUserModel.ConvertoCartEntityTOCartModel(await new CartBL().GetCartByUser(wLogUser.wDetailUser.Id));
+            wCart.UserOwner = wLogUser.wDetailUser;
+            return View("Details", wCart);
         }
 
         // GET: Cart/Create
@@ -73,9 +74,12 @@ namespace AbbigliamentoECommerce.Controllers
         }
 
         // GET: Cart/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> DeleteProduct(string idProduct)
         {
-            return View();
+            LoggedUser wUser = (LoggedUser)Session["CurrentUser"];
+            Google.Cloud.Firestore.WriteResult wResult = await new CartBL().RemoveProductToCart(wUser.wDetailUser.Id, idProduct);
+
+            return await Details();
         }
 
         // POST: Cart/Delete/5
@@ -98,10 +102,10 @@ namespace AbbigliamentoECommerce.Controllers
         {
             //getting the apiContext
             APIContext apiContext = PaypalConfiguration.GetAPIContext();
-
+            wLogUser = (LoggedUser)Session["CurrentUser"];
             try
             {
-               
+
                 //A resource representing a Payer that funds a payment Payment Method as paypal
                 //Payer Id will be returned when payment proceeds or click to pay
                 string payerId = Request.Params["PayerID"];
@@ -114,7 +118,7 @@ namespace AbbigliamentoECommerce.Controllers
                     // Creating a payment
                     // baseURL is the url on which paypal sendsback the data.
                     string baseURI = Request.Url.Scheme + "://" + Request.Url.Authority +
-                                "/Home/PaymentWithPayPal?";
+                                "/Cart/PaymentWithPayPal?";
 
                     //here we are generating guid for storing the paymentID received in session
                     //which will be used in the payment execution
@@ -123,8 +127,8 @@ namespace AbbigliamentoECommerce.Controllers
 
                     //CreatePayment function gives us the payment approval url
                     //on which payer is redirected for paypal account payment
-                   Cart wCart  = ConvertEntityUserTOUserModel.ConvertoCartEntityTOCartModel(await new CartBL().GetCartByUser(wLogUser.wDetailUser.Id));
-                    var createdPayment = this.CreatePayment(apiContext, baseURI + "guid=" + guid,wCart);
+                    Cart wCart = ConvertEntityUserTOUserModel.ConvertoCartEntityTOCartModel(await new CartBL().GetCartByUser(wLogUser.wDetailUser.Id));
+                    var createdPayment = this.CreatePayment(apiContext, baseURI + "guid=" + guid, wCart);
 
                     //get links returned from paypal in response to Create function call
 
@@ -181,7 +185,7 @@ namespace AbbigliamentoECommerce.Controllers
             return this.payment.Execute(apiContext, paymentExecution);
         }
 
-        private  Payment CreatePayment(APIContext apiContext, string redirectUrl, Cart pCart)
+        private Payment CreatePayment(APIContext apiContext, string redirectUrl, Cart pCart)
         {
             //create itemlist and add item objects to it
             var itemList = new ItemList() { items = new List<Item>() };
@@ -193,8 +197,8 @@ namespace AbbigliamentoECommerce.Controllers
                 {
                     name = wDetail.Product.ProductName,
                     currency = "USD",
-                    price = wDetail.Product.Price.ToString(),
-                    quantity = wDetail.Product.QuantityBuy.ToString(),
+                    price = wDetail.Product.Price.ToString("0.##"),
+                    quantity = wDetail.Quantity == 0 ? "1" : wDetail.Quantity.ToString(),
                     sku = "sku"
                 });
 
@@ -208,28 +212,33 @@ namespace AbbigliamentoECommerce.Controllers
                 return_url = redirectUrl
             };
 
-            // Adding Tax, shipping and Subtotal details
-            var details = new Details()
+            Details details=null;
+            //il details deve essere presente solo se si hanno più elementi
+            if (itemList.items.Count > 1)
             {
-                tax = pCart.Vat.ToString(),
-                shipping =pCart.ShippingCost.ToString(),
-                subtotal =pCart.TotalPrice.ToString()
-            };
-
+                // Adding Tax, shipping and Subtotal details
+                 details = new Details()
+                {
+                    tax = pCart.Vat.ToString("0.##"),
+                    shipping = pCart.ShippingCost.ToString("0.##"),
+                    subtotal = pCart.TotalPrice.ToString("0.##")
+                };
+            }
             //Final amount with details
             var amount = new Amount()
             {
                 currency = "USD",
-                total = details.tax + details.shipping + details.subtotal, // Total must be equal to sum of tax, shipping and subtotal.
+                total =details!=null? details.tax + details.shipping + details.subtotal: pCart.TotalPrice.ToString("0.##"), // Total must be equal to sum of tax, shipping and subtotal.
                 details = details
             };
+
 
             var transactionList = new List<Transaction>();
             // Adding description about the transaction
             transactionList.Add(new Transaction()
             {
                 description = "Transaction description",
-                invoice_number = "your generated invoice number", //Generate an Invoice No
+                invoice_number = "1",
                 amount = amount,
                 item_list = itemList
             });
@@ -247,6 +256,19 @@ namespace AbbigliamentoECommerce.Controllers
             return this.payment.Create(apiContext);
         }
 
-       
+        public ActionResult SuccessView()
+        {
+            try
+            {
+                wLogUser = (LoggedUser)Session["CurrentUser"];
+                //creo lo storico dell'ordine
+
+                return View();
+            }
+            catch
+            {
+                return View();
+            }
+        }
     }
 }

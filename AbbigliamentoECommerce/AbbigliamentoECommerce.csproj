@@ -435,6 +435,7 @@
     <Content Include="Views\Shared\_ListCartProduct.cshtml" />
     <Content Include="Views\Cart\Details.cshtml" />
     <Content Include="Views\Statistic\ViewStatistic.cshtml" />
+    <Content Include="Views\Cart\SuccessView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

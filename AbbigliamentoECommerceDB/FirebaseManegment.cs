@@ -123,6 +123,7 @@ namespace AbbigliamentoECommerceDB
                     { "prezzo",pProduct.prezzo },
                     { "nome",pProduct.nome },
                     { "taglia",pProduct.taglia },
+                    {"Quantity",pProduct.Quantity },
                     { "urlDownload",stream.Name },
                     { "urlDownloadWeb",downloadUrl },
                 };
@@ -167,9 +168,9 @@ namespace AbbigliamentoECommerceDB
                 wProd.taglia = documentSnapshot.ContainsField("taglia") ? documentSnapshot.GetValue<string>("taglia") : "";
                 wProd.UrlDownloadWeb = documentSnapshot.ContainsField("urlDownloadWeb") ? documentSnapshot.GetValue<string>("urlDownloadWeb") : "";
                 wProd.descrizione = documentSnapshot.ContainsField("descrizione") ? documentSnapshot.GetValue<string>("descrizione") : "";
-                
+                wProd.Quantity = documentSnapshot.ContainsField("Quantity") ? documentSnapshot.GetValue<int>("Quantity") : 0;
             }
-           
+
 
             return wProd;
         }
@@ -239,11 +240,38 @@ namespace AbbigliamentoECommerceDB
             DocumentReference wDocRef = db.Collection("user").Document(pUserUId);
             DocumentSnapshot snapshot = await wDocRef.GetSnapshotAsync();
             Dictionary<string, object> wMapCart = new Dictionary<string, object>();
-            wMapCart.Add("quanita", pQuantitySelect);
+            wMapCart.Add("quantita", pQuantitySelect);
             wMapCart.Add("uidProdotto", pProduct.UId);
 
             WriteResult wWResult = await wDocRef.UpdateAsync("carrello", FieldValue.ArrayUnion(wMapCart));
 
+            //End get Data
+
+            return wWResult;
+        }
+        public async Task<WriteResult> RemoveProductToCart(string pProductId, string pUserUId)
+        {
+
+            FirestoreDb db = CreateInstanceDB();
+            FirebaseApp wApp = CreateFirebaseApp();
+
+            //GetData
+            DocumentReference wDocRef = db.Collection("user").Document(pUserUId);
+            DocumentSnapshot snapshot = await wDocRef.GetSnapshotAsync();
+            WriteResult wWResult = null;
+            Dictionary<string, object>[] wCartArray = snapshot.ContainsField("carrello") ? snapshot.GetValue<Dictionary<string, object>[]>("carrello") : null;
+            if (wCartArray != null)
+            {
+                foreach (Dictionary<string, object> wCartDBColl in wCartArray)
+                {
+
+                    if (wCartDBColl["uidProdotto"].ToString() == pProductId)
+                    {
+                         wWResult = await wDocRef.UpdateAsync("carrello", FieldValue.ArrayRemove(wCartDBColl));
+                    }
+
+                }
+            }
             //End get Data
 
             return wWResult;
@@ -320,18 +348,17 @@ namespace AbbigliamentoECommerceDB
                 //recupero del uid utente per recuperare tutte le info del'utente loggato
                 //var decoded = await FirebaseAdmin.Auth.FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(auth.FirebaseToken);
                 //var uid = decoded.Uid;
-                DocumentReference wDocRef = db.Collection("users").Document(userId);
+                DocumentReference wDocRef = db.Collection("user").Document(userId);
 
                 DocumentSnapshot snapshot = await wDocRef.GetSnapshotAsync();
                 if (snapshot.Exists)
                 {
-                    AbbigliamentoECommerceEntity.Carrello[] wCartArray = snapshot.ContainsField("carrello") ? snapshot.GetValue<Carrello[]>("carrello") : null;
+                    Dictionary<string, object>[] wCartArray = snapshot.ContainsField("carrello") ? snapshot.GetValue<Dictionary<string, object>[]>("carrello") : null;
                     if (wCartArray != null)
                     {
-                        foreach (Carrello wCartDB in wCartArray)
+                        foreach (Dictionary<string, object> wCartDBColl in wCartArray)
                         {
-
-                            DocumentReference wDocRefProd = db.Collection("prodotto").Document(wCartDB.uidProdotto);
+                            DocumentReference wDocRefProd = db.Collection("prodotto").Document(wCartDBColl["uidProdotto"].ToString());
                             DocumentSnapshot snapshotProd = await wDocRefProd.GetSnapshotAsync();
                             if (snapshotProd.Exists)
                             {
@@ -346,10 +373,12 @@ namespace AbbigliamentoECommerceDB
                                 wProd.taglia = snapshotProd.ContainsField("taglia") ? snapshotProd.GetValue<string>("taglia") : "";
                                 wProd.UrlDownloadWeb = snapshotProd.ContainsField("urlDownloadWeb") ? snapshotProd.GetValue<string>("urlDownloadWeb") : "";
                                 wProd.descrizione = snapshotProd.ContainsField("descrizione") ? snapshotProd.GetValue<string>("descrizione") : "";
-                                wCartDetail.quantita = wCartDB.quantita;
+                                wProd.Quantity = snapshotProd.ContainsField("Quantity") ? snapshotProd.GetValue<int>("Quantity") : 0;
+                                wCartDetail.quantita = Convert.ToInt32(wCartDBColl["quantita"]);
                                 wCartDetail.singleProduct = wProd;
                                 wCart.listProduct.Add(wCartDetail);
                             }
+
                         }
                     }
                 }

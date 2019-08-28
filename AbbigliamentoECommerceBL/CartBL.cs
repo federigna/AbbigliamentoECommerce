@@ -25,5 +25,25 @@ namespace AbbigliamentoECommerceBL
             return await wDB.AddProductToCart(wProd, pUserId, pQauntityBuy);
             
         }
+
+        public async Task<WriteResult> RemoveProductToCart(string pUserId, string pIdProd)
+        {
+            FirebaseManegment wDB = new FirebaseManegment();
+            return await wDB.RemoveProductToCart(pIdProd, pUserId);
+
+        }
+
+        public async Task<WriteResult> AddHistoryBuy(string pUserId)
+        {
+            FirebaseManegment wDB = new FirebaseManegment();
+            Cart wCart = await wDB.GetCartByUser(pUserId);
+            List<Product> wListProd = new List<Product>();
+            foreach(CartDetail wProd in wCart.listProduct)
+            {
+                wListProd.Add(wProd.singleProduct);
+            }
+            return await wDB.AddHistoryBuy(wListProd, pUserId);
+
+        }
     }
 }

@@ -14,13 +14,13 @@
             <div class="col-md-3">
 
                 <dl class="dl-horizontal">
-                    @Html.ActionLink("garbage", "DeleteProduct", "Cart", new { idProduct = item.Product.Id }, new { @class = "garbage" })
+                    @Html.ActionLink("garbage", "DeleteProduct", "Cart", new { idProduct = item.Product.Id }, new { @class = "GarbageBtn" })
                 </dl>
             </div>
             <div class="col-md-3">
 
                 <dl class="dl-horizontal">
-                    @Html.Image(item.Product.Image, "alt", "100")
+                    @Html.Image(item.Product.Image, "alt", "80")
                 </dl>
             </div>
             <div class="col-md-3">
@@ -46,7 +46,7 @@
 
                     <dd>
                         @Html.DropDownListFor(modelItem => item.Quantity,
-                                            new SelectList(item.Quantities.Select(x => new { Value = x.Key, Text = x.Value }),
+                                            new SelectList(item.Quantities.Select(x => new { Value = x.Value, Text = x.Value }),
             "Value",
             "Text", item.Quantity),
                                             "Seleziona Quantità")

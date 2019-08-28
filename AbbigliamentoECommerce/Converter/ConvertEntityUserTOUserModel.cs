@@ -34,6 +34,11 @@ namespace AbbigliamentoECommerce.Converter
             {
                 DetailCart wDetailCart = new DetailCart();
                 wDetailCart.Quantity = wCartDetail.quantita;
+                wDetailCart.Quantities = new Dictionary<int, int>();
+                for (int i = 0; i < wCartDetail.singleProduct.Quantity; i++)
+                {
+                    wDetailCart.Quantities.Add(i, i + 1);
+                }
                 wDetailCart.Product = ProductEntityToProductModel.ConvertoProdyctEntityTOProductModel(wCartDetail.singleProduct);
                 wCart.DetailsCart.Add(wDetailCart);
             }

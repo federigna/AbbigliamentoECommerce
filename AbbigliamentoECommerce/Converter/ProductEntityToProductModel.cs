@@ -37,7 +37,7 @@ namespace AbbigliamentoECommerce.Converter
             wProduct.ListQuantity = new Dictionary<int, int>();
             for (int i = 0; i < wProduct.Quantity; i++)
             {
-                wProduct.ListQuantity.Add(i, i);
+                wProduct.ListQuantity.Add(i, i+1);
             }
             return wProduct;
         }
@@ -86,6 +86,7 @@ namespace AbbigliamentoECommerce.Converter
             wProduct.Price = pProduct.prezzo;
             wProduct.Headmoney = pProduct.taglia;
             wProduct.Image = pProduct.UrlDownloadWeb;
+            
             return wProduct;
         }
 

@@ -6577,15 +6577,15 @@ a.HomeBtn {
 a.GarbageBtn {
     background: url(../Images/garbage.png) no-repeat top left;
     display: block;
-    width: 16px;
-    height: 16px;
+    width: 20px;
+    height: 20px;
     text-indent: -9999px; /* hides the link text */
 }
 a.CartBtn {
     background: url(../Images/Cart.png) no-repeat top left;
     display: block;
     width: 20px;
-    height: 16;
+    height: 16px;
     text-indent: -9999px; /* hides the link text */
 }
 @media (max-width: 767px) {
