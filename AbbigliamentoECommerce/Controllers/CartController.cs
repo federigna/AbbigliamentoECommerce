@@ -261,7 +261,10 @@ namespace AbbigliamentoECommerce.Controllers
             try
             {
                 wLogUser = (LoggedUser)Session["CurrentUser"];
+                //scrittura pdf di conferma acquisto
+                
                 //creo lo storico dell'ordine
+                new CartBL().AddHistoryBuy(wLogUser.Id);
 
                 return View();
             }

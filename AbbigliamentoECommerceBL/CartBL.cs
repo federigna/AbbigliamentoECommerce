@@ -1,8 +1,10 @@
-﻿using AbbigliamentoECommerceDB;
+﻿using AbbigliamentoECommerceBL.Utility;
+using AbbigliamentoECommerceDB;
 using AbbigliamentoECommerceEntity;
 using Google.Cloud.Firestore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -45,5 +47,12 @@ namespace AbbigliamentoECommerceBL
             return await wDB.AddHistoryBuy(wListProd, pUserId);
 
         }
+
+        public FileStream CreatePDF()
+        {
+            return  ManagementDocument.CreateOrderDocument("C:\\Users\\feder\\Downloads", "00001",null,null);
+
+        }
+
     }
 }
