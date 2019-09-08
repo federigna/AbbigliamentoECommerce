@@ -1,5 +1,6 @@
 ﻿using AbbigliamentoECommerce.Converter;
 using AbbigliamentoECommerce.Models;
+using AbbigliamentoECommerce.Utility;
 using AbbigliamentoECommerceBL;
 using PayPal.Api;
 using System;
@@ -260,12 +261,14 @@ namespace AbbigliamentoECommerce.Controllers
         {
             try
             {
-                wLogUser = (LoggedUser)Session["CurrentUser"];
+                //wLogUser = (LoggedUser)Session["CurrentUser"];
                 //scrittura pdf di conferma acquisto
-                
-                //creo lo storico dell'ordine
-                new CartBL().AddHistoryBuy(wLogUser.Id);
 
+                //creo lo storico dell'ordine
+                //new CartBL().AddHistoryBuy(wLogUser.Id);
+              
+
+                //Invio mail
                 return View();
             }
             catch
