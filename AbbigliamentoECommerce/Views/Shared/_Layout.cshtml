@@ -50,7 +50,10 @@
 
             @if (Session["CurrentUser"] != null)
             {
-                <h4>Benvenuto,</h4>
+
+                <h4>
+                    Benvenuto,  @(((AbbigliamentoECommerce.Models.LoggedUser)Session["CurrentUser"]).wDetailUser.Name);
+                </h4>
                 @Html.ActionLink("ViewCart", "Details", "Cart", null, new { @class = "CartBtn" })
                 @Html.ActionLink("Logout", "Logout", "Home")
             }
