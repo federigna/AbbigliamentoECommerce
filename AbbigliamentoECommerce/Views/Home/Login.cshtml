@@ -2,7 +2,7 @@
 
 @{
     /**/
-
+    string wError = ViewBag.ErrorMessage;
     ViewBag.Title = "Login";
 }
 
@@ -39,6 +39,13 @@
     </div>
 }
 
+<script>
+     (function () {
+         if ('@wError' != '') {
+            alert('@wError');
+        }
+    })();
+</script>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

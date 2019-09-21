@@ -1,5 +1,6 @@
 ﻿using AbbigliamentoECommerce.Converter;
 using AbbigliamentoECommerce.Models;
+using AbbigliamentoECommerce.Utility;
 using AbbigliamentoECommerceBL;
 using System;
 using System.Collections.Generic;
@@ -67,10 +68,11 @@ namespace AbbigliamentoECommerce.Controllers
                     return View(pUser);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                Log.Error("Errore in fase di Login", ex);
+                ViewBag.ErrorMessage = "Username o Password errati";
+                return View(pUser);
             }
         }
     }

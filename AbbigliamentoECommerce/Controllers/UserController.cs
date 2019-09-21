@@ -1,5 +1,6 @@
 ﻿using AbbigliamentoECommerce.Converter;
 using AbbigliamentoECommerce.Models;
+using AbbigliamentoECommerce.Utility;
 using AbbigliamentoECommerceBL;
 using System;
 using System.Collections.Generic;
@@ -44,7 +45,8 @@ namespace AbbigliamentoECommerce.Controllers
                     
                     UserBL wDB = new UserBL();
                    
-                    wDB.InsertUser(ConvertEntityUserTOUserModel.ConvertoUserEntityTOUserModel(collection)).Wait();
+                    await wDB.InsertUser(ConvertEntityUserTOUserModel.ConvertoUserEntityTOUserModel(collection));
+                    ViewBag.ErrorMessage = "Registrazione avvenuta con successo";
                     return RedirectToAction("Login","Home");
                 }
                 else
@@ -54,7 +56,9 @@ namespace AbbigliamentoECommerce.Controllers
             }
             catch (Exception ex)
             {
-                return View();
+                Log.Error("Errore in fase di Registrazione", ex);
+                ViewBag.ErrorMessage = "Registrazione non Riuscita. " + ex.Message;
+                return View(collection);
             }
         }
 

@@ -48,9 +48,11 @@ namespace AbbigliamentoECommerceDB
         }
         public async Task<WriteResult> InsertUser(AbbigliamentoECommerceEntity.User pUser)
         {
-
-            FirestoreDb db = CreateInstanceDB();
             FirebaseApp wApp = CreateFirebaseApp();
+            FirestoreDb db = CreateInstanceDB();
+            var appSettings = ConfigurationManager.AppSettings;
+            string apiKey = appSettings["FirebaseApiKey"] ?? "Not Found";
+
             UserRecordArgs args = new UserRecordArgs()
             {
                 Email = pUser.email,
@@ -60,20 +62,22 @@ namespace AbbigliamentoECommerceDB
                 DisplayName = pUser.nome,
                 Disabled = false,
             };
+            //var authProvider = new FirebaseAuthProvider(new FirebaseConfig(apiKey));
 
+            //var auth = authProvider.CreateUserWithEmailAndPasswordAsync(args.Email, args.Password).Result;
+            
             UserRecord userRecord = await FirebaseAdmin.Auth.FirebaseAuth.GetAuth(wApp).CreateUserAsync(args);
             // See the UserRecord reference doc for the contents of userRecord.
             //Console.WriteLine($"Successfully created new user: {userRecord.Uid}");
 
             //GetData
-            DocumentReference wDocRef = db.Collection("users").Document(userRecord.Uid);
-            DocumentSnapshot snapshot = await wDocRef.GetSnapshotAsync();
-
+            DocumentReference wDocRef = db.Collection("user").Document(userRecord.Uid);
+            
             Dictionary<string, object> wDictionaryUser = new Dictionary<string, object>
                 {
                     { "Address",pUser.Address },
                     { "City",pUser.City },
-                    { "DateOfBirth",pUser.DateOfBirth },
+                    //{ "DateOfBirth",pUser.DateOfBirth },
                     { "District",pUser.District },
                     { "email",pUser.email },
                     { "cognome",pUser.cognome },
@@ -81,11 +85,11 @@ namespace AbbigliamentoECommerceDB
                     { "TelefoneNumber",pUser.TelefoneNumber },
                     { "Ruolo","Cliente" },
                 };
-            WriteResult wWResult = await wDocRef.SetAsync(wDictionaryUser);
+            return await wDocRef.SetAsync(wDictionaryUser);
 
             //End get Data
 
-            return wWResult;
+           // return wWResult;
         }
         public async Task InsertProduct(Product pProduct, string pToken)
         {
@@ -206,6 +210,10 @@ namespace AbbigliamentoECommerceDB
             if (!string.IsNullOrEmpty(product.colore))
             {
                 allProductsQuery = allProductsQuery.WhereEqualTo("colore", product.colore);
+            }
+            if (!string.IsNullOrEmpty(product.modello))
+            {
+                allProductsQuery = allProductsQuery.WhereEqualTo("modello", product.modello);
             }
             if (product.nome == null)
             {

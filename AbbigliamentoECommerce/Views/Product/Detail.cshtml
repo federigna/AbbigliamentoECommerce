@@ -4,6 +4,7 @@
     ViewBag.Title = "Details";
     string IdUser = (AbbigliamentoECommerce.Models.LoggedUser)Session["CurrentUser"] != null ? ((AbbigliamentoECommerce.Models.LoggedUser)Session["CurrentUser"]).wDetailUser.Id : "";
     string wScriptDetail = ViewBag.ScriptDetail;
+    int wQuantity = 0;
 }
 
 <h2>Details</h2>
@@ -40,9 +41,8 @@
                 </dt>
 
                 <dd>
-                    @Html.DropDownListFor(model => model.QuantityBuy, new SelectList(Model.ListQuantity.Select(x => new { Value = x.Key, Text = x.Value }),
-         "Value",
-         "Text", Model.QuantityBuy))
+                    @Html.DropDownListFor(model => model.QuantityBuy, new SelectList(Model.ListQuantity.Select(x => new { Value = x.Key, Text = x.Value }), "Value", "Text"), new { @class = "form-control", @onChange = "SelectedValue(this)" })
+                    @Html.HiddenFor(model => model.QuantityBuy, new { id = "QuantityBuy" })
                 </dd>
 
                 <dt>
@@ -96,7 +96,7 @@
             </dl>
         </div>
     </div>
-    @Html.ActionLink("Aggiungi al Carrello", "AddCart", "Product", new { pId = Model.Id, pQuantityBy= Model.QuantityBuy }, new { @class = "btn btn-login pull-right", onclick = "return IsLoggedUser();" })
+    @Html.ActionLink("Aggiungi al Carrello", "AddCart", "Product", new { pId = Model.Id, pQuantityBy = Model.QuantityBuy }, new { @class = "btn btn-login pull-right", onclick = "return IsLoggedUser();" })
 </div>
 
 <p>
@@ -108,7 +108,7 @@
 </p>
 
 <script>
-    
+
     (function () {
          if ('@wScriptDetail' != '') {
             alert('@wScriptDetail');
@@ -120,5 +120,12 @@
             return false;
         }
         return true;
+    }
+
+     function SelectedValue(ddlObject)
+    {
+        
+         document.getElementById("QuantityBuy").value= ddlObject.options[ddlObject.selectedIndex].innerHTML;
+         //@wQuantity = selectedText;
     }
 </script>

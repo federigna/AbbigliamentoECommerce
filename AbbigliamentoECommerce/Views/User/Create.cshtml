@@ -1,175 +1,183 @@
 ﻿@model AbbigliamentoECommerce.Models.User
 
 @{
+    string wError = ViewBag.ErrorMessage;
     ViewBag.Title = "Create";
 }
 
 
-        <h2>Registrazione Utenza</h2>
+<h2>Registrazione Utenza</h2>
 
-    @using (Html.BeginForm("Create", "User", FormMethod.Post, htmlAttributes: new { @class = "form" }))
-    {
-        <div class="row">
-            <div class="col-md-3">
+@using (Html.BeginForm("Create", "User", FormMethod.Post, htmlAttributes: new { @class = "form" }))
+{
+    <div class="row">
+        <div class="col-md-3">
 
-                <dl class="dl-horizontal">
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Name)
-                    </dt>
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.Name)
+                </dt>
 
-                    <dd>
-                        @Html.EditorFor(model => model.Name,  new
-                            {
-                                @class = "form-control"
-                            })
-                        @Html.ValidationMessageFor(model => model.Name, "", new
+                <dd>
+                    @Html.EditorFor(model => model.Name,  new
                         {
-                            @class = "text-danger"
+                            @class = "form-control"
                         })
-                    </dd>
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Surname)
-                    </dt>
+                    @Html.ValidationMessageFor(model => model.Name, "", new
+                    {
+                        @class = "text-danger"
+                    })
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Surname)
+                </dt>
 
-                    <dd>
-                        @Html.EditorFor(model => model.Surname,  new
-                            {
-                                @class = "form-control"
-                            })
-                        @Html.ValidationMessageFor(model => model.Surname, "", new
+                <dd>
+                    @Html.EditorFor(model => model.Surname,  new
                         {
-                            @class = "text-danger"
+                            @class = "form-control"
                         })
-                    </dd>
-                    <dt>
-                        @Html.DisplayNameFor(model => model.DateOfBirth)
-                    </dt>
+                    @Html.ValidationMessageFor(model => model.Surname, "", new
+                    {
+                        @class = "text-danger"
+                    })
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.DateOfBirth)
+                </dt>
 
-                    <dd>
-                        @Html.EditorFor(model => model.DateOfBirth,  new
-                   {
-                       @class = "datepicker",
-                       type = "datetime-local"
-                   })
-                        @Html.ValidationMessageFor(model => model.DateOfBirth, "", new
+                <dd>
+                    @Html.EditorFor(model => model.DateOfBirth,  new
+               {
+                   @class = "datepicker",
+                   type = "datetime-local"
+               })
+                    @Html.ValidationMessageFor(model => model.DateOfBirth, "", new
+                    {
+                        @class = "text-danger"
+                    })
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.TelefoneNumber)
+                </dt>
+
+                <dd>
+                    @Html.EditorFor(model => model.TelefoneNumber)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Address)
+                </dt>
+
+                <dd>
+                    @Html.EditorFor(model => model.Address, new
                         {
-                            @class = "text-danger"
+                            @class = "form-control"
                         })
-                    </dd>
+                    @Html.ValidationMessageFor(model => model.Address, "", new
+                    {
+                        @class = "text-danger"
+                    })
+                </dd>
 
-                    <dt>
-                        @Html.DisplayNameFor(model => model.TelefoneNumber)
-                    </dt>
+                <dt>
+                    @Html.DisplayNameFor(model => model.City)
+                </dt>
 
-                    <dd>
-                        @Html.EditorFor(model => model.TelefoneNumber)
-                    </dd>
-
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Address)
-                    </dt>
-
-                    <dd>
-                        @Html.EditorFor(model => model.Address, new
-                            {
-                                @class = "form-control"
-                            })
-                        @Html.ValidationMessageFor(model => model.Address, "", new
+                <dd>
+                    @Html.EditorFor(model => model.City,  new
                         {
-                            @class = "text-danger"
+                            @class = "form-control"
                         })
-                    </dd>
+                    @Html.ValidationMessageFor(model => model.City, "", new
+                    {
+                        @class = "text-danger"
+                    })
+                </dd>
 
-                    <dt>
-                        @Html.DisplayNameFor(model => model.City)
-                    </dt>
 
-                    <dd>
-                        @Html.EditorFor(model => model.City,  new
-                            {
-                                @class = "form-control"
-                            })
-                        @Html.ValidationMessageFor(model => model.City, "", new
-                        {
-                            @class = "text-danger"
-                        })
-                    </dd>
-
-                    
-                </dl>
-            </div>
-            <div class="col-md-3"></div>
-            <div class="col-md-3">
-                <dl class="dl-horizontal">
-                    <dt>
-                        @Html.DisplayNameFor(model => model.District)
-                    </dt>
-
-                    <dd>
-                        @Html.EditorFor(model => model.District, new
-                            {
-                                @class = "form-control"
-                            })
-                        @Html.ValidationMessageFor(model => model.District, "", new
-                        {
-                            @class = "text-danger"
-                        })
-                    </dd>
-                    <dt>
-
-                        @Html.DisplayNameFor(model => model.Email)
-                    </dt>
-
-                    <dd>
-                        @Html.EditorFor(model => model.Email,  new
-                            {
-                                @class = "form-control"
-                            })
-                        @Html.ValidationMessageFor(model => model.Email, "", new
-                        {
-                            @class = "text-danger"
-                        })
-                    </dd>
-
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Password)
-                    </dt>
-
-                    <dd>
-                        @Html.EditorFor(model => model.Password,  new
-                            {
-                                @class = "form-control", type = "password"
-                            })
-                        @Html.ValidationMessageFor(model => model.Password, "", new
-                        {
-                            @class = "text-danger"
-                        })
-                    </dd>
-
-                    <dt>
-                        @Html.DisplayNameFor(model => model.ConfirmePassword)
-                    </dt>
-
-                    <dd>
-                        @Html.EditorFor(model => model.ConfirmePassword, new
-                            {
-                                @class = "form-control", type = "password"
-                            })
-                        @Html.ValidationMessageFor(model => model.ConfirmePassword, "", new
-                        {
-                            @class = "text-danger"
-                        })
-                    </dd>
-
-                </dl>
-            </div>
+            </dl>
         </div>
-        <p>
-            @if (Model.Id != "")
-            {
-                Html.ActionLink("Edit", "Edit", new { id = Model.Id });
-            }
-            <div class="form-group"> <input type="submit" value="Salva"  class="pull-right"/> </div>
-        </p>
-    }
+        <div class="col-md-3"></div>
+        <div class="col-md-3">
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.District)
+                </dt>
 
+                <dd>
+                    @Html.EditorFor(model => model.District, new
+                        {
+                            @class = "form-control"
+                        })
+                    @Html.ValidationMessageFor(model => model.District, "", new
+                    {
+                        @class = "text-danger"
+                    })
+                </dd>
+                <dt>
+
+                    @Html.DisplayNameFor(model => model.Email)
+                </dt>
+
+                <dd>
+                    @Html.EditorFor(model => model.Email,  new
+                        {
+                            @class = "form-control"
+                        })
+                    @Html.ValidationMessageFor(model => model.Email, "", new
+                    {
+                        @class = "text-danger"
+                    })
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Password)
+                </dt>
+
+                <dd>
+                    @Html.EditorFor(model => model.Password,  new
+                        {
+                            @class = "form-control", type = "password"
+                        })
+                    @Html.ValidationMessageFor(model => model.Password, "", new
+                    {
+                        @class = "text-danger"
+                    })
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.ConfirmePassword)
+                </dt>
+
+                <dd>
+                    @Html.EditorFor(model => model.ConfirmePassword, new
+                        {
+                            @class = "form-control", type = "password"
+                        })
+                    @Html.ValidationMessageFor(model => model.ConfirmePassword, "", new
+                    {
+                        @class = "text-danger"
+                    })
+                </dd>
+
+            </dl>
+        </div>
+    </div>
+    <p>
+        @if (Model.Id != "")
+        {
+            Html.ActionLink("Edit", "Edit", new { id = Model.Id });
+        }
+        <div class="form-group"> <input type="submit" value="Salva" class="pull-right" /> </div>
+    </p>
+}
+
+<script>
+     (function () {
+         if ('@wError' != '') {
+            alert('@wError');
+        }
+    })();
+</script>

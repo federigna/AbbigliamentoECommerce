@@ -26,6 +26,8 @@ namespace AbbigliamentoECommerceEntity
         [FirestoreProperty]
         public string categoria { get; set; }
         [FirestoreProperty]
+        public string modello { get; set; }
+        [FirestoreProperty]
         public double prezzo { get; set; }
         [FirestoreProperty]
         public string UrlDownload { get; set; }

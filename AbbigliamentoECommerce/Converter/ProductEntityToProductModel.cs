@@ -50,6 +50,7 @@ namespace AbbigliamentoECommerce.Converter
             wProduct.marca = pProduct.Brand;
             wProduct.nome = pProduct.ProductName;
             wProduct.taglia = pProduct.Headmoney;
+            wProduct.modello = pProduct.Model;
             return wProduct;
         }
 
@@ -65,6 +66,7 @@ namespace AbbigliamentoECommerce.Converter
                 wProduct.Brand = pProduct.marca;
                 wProduct.ProductName = pProduct.nome;
                 wProduct.Price = pProduct.prezzo;
+                wProduct.Model = pProduct.modello;
                 wProduct.Quantity = pProduct.Quantity;
                 wProduct.Headmoney = pProduct.taglia;
                 wProduct.Image = pProduct.UrlDownloadWeb;
