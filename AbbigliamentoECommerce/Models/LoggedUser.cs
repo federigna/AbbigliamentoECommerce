@@ -19,5 +19,7 @@ namespace AbbigliamentoECommerce.Models
         public string Password { get; set; }
         
         public User wDetailUser { get; set; }
+
+        public Cart wCart { get; set; }
     }
 }
