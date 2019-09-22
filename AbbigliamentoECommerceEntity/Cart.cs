@@ -6,7 +6,7 @@ namespace AbbigliamentoECommerceEntity
 {
     public class Cart
     {
-       
+       public int NumOrdine { get; set; }
         public List<CartDetail> listProduct{ get; set; }
     }
 }

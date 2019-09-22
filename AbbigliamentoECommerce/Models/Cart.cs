@@ -11,6 +11,7 @@ namespace AbbigliamentoECommerce.Models
         public double TotalPrice { get; set; }
         public double Vat { get; set; }
         public double ShippingCost { get; set; }
+        public int NumOrder { get; set; }
         public List<DetailCart> DetailsCart { get; set; }
     }
 }

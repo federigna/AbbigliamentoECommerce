@@ -15,7 +15,7 @@ namespace AbbigliamentoECommerceBL.Utility
         public static FileStream CreateOrderDocument(string pPathFile, string pNumOrd, Cart pCart, User pUser)
         {
 
-            System.IO.FileStream fs = new FileStream(pPathFile + "\\" + "First PDF document.pdf", FileMode.Create);
+            System.IO.FileStream fs = new FileStream(pPathFile + "\\" + "Order_"+pNumOrd+".pdf", FileMode.Create);
             // Create an instance of the document class which represents the PDF document itself.  
             Document document = new Document(PageSize.A4, 25, 25, 30, 30);
 

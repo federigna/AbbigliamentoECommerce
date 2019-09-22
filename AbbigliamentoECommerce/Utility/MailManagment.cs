@@ -11,7 +11,7 @@ namespace AbbigliamentoECommerce.Utility
 {
     public static class MailManagment
     {
-        public static bool SendEmail(string htmlString, string pPathOrderPDF, LoggedUser pLoggedUser)
+        public static bool SendEmail( string pPathOrderPDF, LoggedUser pLoggedUser)
         {
             try
             {

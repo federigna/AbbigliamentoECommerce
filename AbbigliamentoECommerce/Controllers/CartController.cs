@@ -2,9 +2,12 @@
 using AbbigliamentoECommerce.Models;
 using AbbigliamentoECommerce.Utility;
 using AbbigliamentoECommerceBL;
+using AbbigliamentoECommerceBL.Utility;
 using PayPal.Api;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -104,6 +107,7 @@ namespace AbbigliamentoECommerce.Controllers
             //getting the apiContext
             APIContext apiContext = PaypalConfiguration.GetAPIContext();
             wLogUser = (LoggedUser)Session["CurrentUser"];
+            Cart wCart = null;
             try
             {
 
@@ -128,7 +132,9 @@ namespace AbbigliamentoECommerce.Controllers
 
                     //CreatePayment function gives us the payment approval url
                     //on which payer is redirected for paypal account payment
-                    Cart wCart = ConvertEntityUserTOUserModel.ConvertoCartEntityTOCartModel(await new CartBL().GetCartByUser(wLogUser.wDetailUser.Id));
+                    wCart = ConvertEntityUserTOUserModel.ConvertoCartEntityTOCartModel(await new CartBL().GetCartByUser(wLogUser.wDetailUser.Id));
+                    wCart.NumOrder = new CartBL().GenerateNumOrder();
+                    Session["NumOrder"] = wCart.NumOrder;
                     var createdPayment = this.CreatePayment(apiContext, baseURI + "guid=" + guid, wCart);
 
                     //get links returned from paypal in response to Create function call
@@ -174,7 +180,43 @@ namespace AbbigliamentoECommerce.Controllers
                 return View("FailureView");
             }
 
+
             //on successful payment, show success page to user.
+            wLogUser = (LoggedUser)Session["CurrentUser"];
+            string wNumOrder = Session["NumOrder"] != null ? Session["NumOrder"].ToString() : "";
+            //scrittura pdf di conferma acquisto
+            Log.Info("Scrittura PDF per ordine " + wNumOrder);
+            var appSettings = ConfigurationManager.AppSettings;
+            string wUrlPDF = appSettings["UlrPDF"];
+            FileStream wPFD = ManagementDocument.CreateOrderDocument(wUrlPDF, wNumOrder, await new CartBL().GetCartByUser(wLogUser.wDetailUser.Id),
+               ConvertEntityUserTOUserModel.ConvertoUserEntityTOUserModel(wLogUser.wDetailUser));
+            //invio Mail
+            try
+            {
+                Log.Info("Tentativo invio mail per ordine " + wNumOrder);
+                MailManagment.SendEmail(wPFD.Name, wLogUser);
+            }
+            catch (Exception ex)
+            {
+
+                Log.Error("Errore durante l'invio della mail.", ex);
+
+            }
+
+            try
+            {
+                //creo lo storico dell'ordine
+                Log.Info("Scrittura Storico per ordine " + wNumOrder + " dell'utente " + wLogUser.Id);
+                await new CartBL().AddHistoryBuy(wLogUser.wDetailUser.Id, wNumOrder);
+
+              
+            }
+            catch (Exception ex)
+            {
+
+                Log.Error("Errore durante la scrittura dello storico ordine.", ex);
+
+            }
             return View("SuccessView");
         }
 
@@ -213,12 +255,12 @@ namespace AbbigliamentoECommerce.Controllers
                 return_url = redirectUrl
             };
 
-            Details details=null;
+            Details details = null;
             //il details deve essere presente solo se si hanno più elementi
             if (itemList.items.Count > 1)
             {
                 // Adding Tax, shipping and Subtotal details
-                 details = new Details()
+                details = new Details()
                 {
                     tax = pCart.Vat.ToString("0.##"),
                     shipping = pCart.ShippingCost.ToString("0.##"),
@@ -229,7 +271,7 @@ namespace AbbigliamentoECommerce.Controllers
             var amount = new Amount()
             {
                 currency = "USD",
-                total =details!=null? details.tax + details.shipping + details.subtotal: pCart.TotalPrice.ToString("0.##"), // Total must be equal to sum of tax, shipping and subtotal.
+                total = details != null ? details.tax + details.shipping + details.subtotal : pCart.TotalPrice.ToString("0.##"), // Total must be equal to sum of tax, shipping and subtotal.
                 details = details
             };
 
@@ -238,8 +280,8 @@ namespace AbbigliamentoECommerce.Controllers
             // Adding description about the transaction
             transactionList.Add(new Transaction()
             {
-                description = "Transaction description",
-                invoice_number = "1",
+                description = "Ordine Abbigliamento E-Commercde numero " + pCart.NumOrder.ToString(),
+                invoice_number = pCart.NumOrder.ToString(),
                 amount = amount,
                 item_list = itemList
             });
@@ -257,18 +299,11 @@ namespace AbbigliamentoECommerce.Controllers
             return this.payment.Create(apiContext);
         }
 
-        public ActionResult SuccessView()
+        public async Task<ActionResult> SuccessView()
         {
             try
             {
-                //wLogUser = (LoggedUser)Session["CurrentUser"];
-                //scrittura pdf di conferma acquisto
-
-                //creo lo storico dell'ordine
-                //new CartBL().AddHistoryBuy(wLogUser.Id);
-              
-
-                //Invio mail
+                
                 return View();
             }
             catch

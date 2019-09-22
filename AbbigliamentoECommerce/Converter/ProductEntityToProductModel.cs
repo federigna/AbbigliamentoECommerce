@@ -19,7 +19,7 @@ namespace AbbigliamentoECommerce.Converter
             wProduct.prezzo = pProduct.Price;
             wProduct.Quantity = pProduct.Quantity;
             wProduct.taglia = pProduct.Headmoney;
-            wProduct.UrlDownloadWeb = pProduct.Image;
+            wProduct.UrlDownloadWeb = pProduct.ImageFile.FileName;
             return wProduct;
         }
         public static AbbigliamentoECommerce.Models.Product ConvertoProdyctModelTOProductEntity(AbbigliamentoECommerceEntity.Product pProduct)

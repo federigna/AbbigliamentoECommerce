@@ -3,6 +3,7 @@ using AbbigliamentoECommerce.Models;
 using AbbigliamentoECommerceBL;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -47,7 +48,7 @@ namespace AbbigliamentoECommerce.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult> Create(Product collection)
+        public async Task<ActionResult> Create(Product collection,HttpPostedFileBase pFile)
         {
             try
             {
@@ -55,7 +56,10 @@ namespace AbbigliamentoECommerce.Controllers
                 {
                     // TODO: Add insert logic here
                     ProductBL wDB = new ProductBL();
-
+                    var appSetting = ConfigurationManager.AppSettings;
+                    string pathImage = appSetting["PathImage"];
+                    collection.Image = pathImage + collection.ImageFile.FileName;
+                    collection.ImageFile.SaveAs(collection.Image);
                     wDB.InsertProduct(ProductEntityToProductModel.ConvertoProdyctEntityTOProductModel(collection), "").Wait();
                     return RedirectToAction("Home");
                 }

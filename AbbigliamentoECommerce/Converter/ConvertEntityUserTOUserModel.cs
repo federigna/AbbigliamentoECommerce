@@ -45,6 +45,21 @@ namespace AbbigliamentoECommerce.Converter
             return wCart;
         }
 
+        public static AbbigliamentoECommerceEntity.Cart ConvertCartModelTOCartEntity(Cart pCart)
+        {
+            AbbigliamentoECommerceEntity.Cart wCart = new AbbigliamentoECommerceEntity.Cart();
+            
+            wCart.listProduct = new List<AbbigliamentoECommerceEntity.CartDetail>();
+            foreach (DetailCart wCartDetail in pCart.DetailsCart)
+            {
+                AbbigliamentoECommerceEntity.CartDetail wDetailCart = new AbbigliamentoECommerceEntity.CartDetail();
+                wDetailCart.quantita = wCartDetail.Quantity;
+                wDetailCart.singleProduct = ProductEntityToProductModel.ConvertoProdyctEntityTOProductModel(wCartDetail.Product);
+                wCart.listProduct.Add(wDetailCart);
+            }
+            return wCart;
+        }
+
         public static AbbigliamentoECommerceEntity.User ConvertoUserEntityTOUserModel(User collection)
         {
             AbbigliamentoECommerceEntity.User wUser = new AbbigliamentoECommerceEntity.User();

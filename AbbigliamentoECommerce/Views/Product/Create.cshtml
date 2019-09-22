@@ -6,7 +6,7 @@
 
 <h2>Inserimento Prodotto</h2>
 
-@using (Html.BeginForm("Create", "Product", FormMethod.Post, htmlAttributes: new { @class = "form" }))
+@using (Html.BeginForm("Create", "Product", FormMethod.Post, htmlAttributes: new { @class = "form", enctype = "multipart/form-data" }))
 {
     <div class="row">
         <div class="col-md-3">
@@ -157,14 +157,15 @@
                 </dt>
 
                 <dd>
-
+                      <input type="file" name="ImageFile" required/>
+               
                     @*@Html.TextBoxFor(model => model.Image, new { type = "file" })*@
-                    @Html.EditorFor(model => model.Image, new { htmlAttributes = new { type = "file" } })
+                    @*@Html.EditorFor(model => model.ImageFile, new { htmlAttributes = new { type = "file" } })
 
-                    @Html.ValidationMessageFor(model => model.Image, "", new
+                    @Html.ValidationMessageFor(model => model.ImageFile, null, new
                     {
                         @class = "text-danger"
-                    })
+                    })*@
                 </dd>
 
 

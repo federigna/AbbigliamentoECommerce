@@ -99,7 +99,7 @@ namespace AbbigliamentoECommerceDB
 
             FirestoreDb db = CreateInstanceDB();
             // Get any Stream - it can be FileStream, MemoryStream or any other type of Stream
-            var stream = File.Open(pProduct.UrlDownload, FileMode.Open);
+            var stream = File.Open(pProduct.UrlDownloadWeb, FileMode.Open);
 
 
             var app =
@@ -284,7 +284,7 @@ namespace AbbigliamentoECommerceDB
 
             return wWResult;
         }
-        public async Task<WriteResult> AddHistoryBuy(List<Product> pProduct, string pUserUId)
+        public async Task<WriteResult> AddHistoryBuy(List<Product> pProduct, string pUserUId, int pNumOrdine)
         {
 
             FirestoreDb db = CreateInstanceDB();
@@ -298,17 +298,40 @@ namespace AbbigliamentoECommerceDB
             int i = 1;
             foreach (Product wProd in pProduct)
             {
-
-                wSingleProd.Add(i.ToString(), wProd);
+                Dictionary<string, object> wDictionaryProd = new Dictionary<string, object>
+                {
+                    { "categoria",wProd.categoria },
+                    { "marca",wProd.marca },
+                    { "prezzo",wProd.prezzo },
+                    { "nome",wProd.nome },
+                    { "taglia",wProd.taglia },
+                    {"Quantity",wProd.Quantity },
+                };
+                wSingleProd.Add(i.ToString(), wDictionaryProd);
                 i++;
             }
-            wAcquisto.Add(pUserUId, wSingleProd);
+            wAcquisto.Add("uidUtente", pUserUId);
+            wAcquisto.Add("numOrdine", pNumOrdine);
+            wAcquisto.Add("prodotti", wSingleProd);
 
-            WriteResult wWResult = await wDocRef.SetAsync(wAcquisto);
+            WriteResult wResult= await wDocRef.SetAsync(wAcquisto);
 
-            //End get Data
+            try
+            {
+                //Svuoto il carrello
+                foreach (Product wProd in pProduct)
+                {
+                    await RemoveProductToCart(wProd.UId, pUserUId);
+                }
+            }
+            catch (Exception ex)
+            {
 
-            return wWResult;
+                throw ex;
+            }
+           
+
+            return wResult;
         }
 
         public async Task<List<Category>> GetCategory(string pNameRaccolta)

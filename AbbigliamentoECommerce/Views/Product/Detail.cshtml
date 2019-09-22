@@ -22,6 +22,7 @@
             <dl class="dl-horizontal">
                 <dt>
                     @Html.DisplayNameFor(model => model.Description)
+                    @Html.HiddenFor(model=>model.Id)
                 </dt>
 
                 <dd>
@@ -41,8 +42,8 @@
                 </dt>
 
                 <dd>
-                    @Html.DropDownListFor(model => model.QuantityBuy, new SelectList(Model.ListQuantity.Select(x => new { Value = x.Key, Text = x.Value }), "Value", "Text"), new { @class = "form-control", @onChange = "SelectedValue(this)" })
-                    @Html.HiddenFor(model => model.QuantityBuy, new { id = "QuantityBuy" })
+                    @Html.DropDownListFor(model => model.QuantityBuy, new SelectList(Model.ListQuantity.Select(x => new { Value = x.Key, Text = x.Value }), "Value", "Text",Model.QuantityBuy))
+                    
                 </dd>
 
                 <dt>
@@ -96,7 +97,8 @@
             </dl>
         </div>
     </div>
-    @Html.ActionLink("Aggiungi al Carrello", "AddCart", "Product", new { pId = Model.Id, pQuantityBy = Model.QuantityBuy }, new { @class = "btn btn-login pull-right", onclick = "return IsLoggedUser();" })
+    <button id="addCartbtn" class="btn btn-login pull-right" onclick="return IsLoggedUser();">Aggiungi al Carrello</button>
+    @*@Html.ActionLink("Aggiungi al Carrello", new { @class = "btn btn-login pull-right", onclick = "return IsLoggedUser();" })*@
 </div>
 
 <p>
@@ -115,11 +117,14 @@
         }
     })();
     function IsLoggedUser() {
-        if ('@IdUser'== '') {
+        if ('@IdUser' == '') {
             alert("Per agiungere un elemento al carello è necessario essere loggati");
             return false;
+        } else {
+            var path = '@Url.Content("~/Product/AddCart")' + '?pId=' + document.getElementById("Id").value + '&pQuantityBy=' + document.getElementById("QuantityBuy").selectedOptions[0].text;
+            window.location = path;
+            //return true;
         }
-        return true;
     }
 
      function SelectedValue(ddlObject)

@@ -35,16 +35,19 @@ namespace AbbigliamentoECommerceBL
 
         }
 
-        public async Task<WriteResult> AddHistoryBuy(string pUserId)
+        public async Task<WriteResult> AddHistoryBuy(string pUserId, string pNumOrder)
         {
             FirebaseManegment wDB = new FirebaseManegment();
             Cart wCart = await wDB.GetCartByUser(pUserId);
             List<Product> wListProd = new List<Product>();
             foreach(CartDetail wProd in wCart.listProduct)
             {
-                wListProd.Add(wProd.singleProduct);
+                Product wPrdoCart = new Product();
+                wPrdoCart = wProd.singleProduct;
+                wPrdoCart.Quantity = wProd.quantita;
+                wListProd.Add(wPrdoCart);
             }
-            return await wDB.AddHistoryBuy(wListProd, pUserId);
+            return await wDB.AddHistoryBuy(wListProd, pUserId,Convert.ToInt32(pNumOrder));
 
         }
 
@@ -52,6 +55,12 @@ namespace AbbigliamentoECommerceBL
         {
             return  ManagementDocument.CreateOrderDocument("C:\\Users\\feder\\Downloads", "00001",null,null);
 
+        }
+
+        public int GenerateNumOrder()
+        {
+            string wDate = DateTime.Now.Year.ToString().Substring(2, 2) + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString();
+            return Convert.ToInt32(wDate )+ DateTime.Now.Hour + DateTime.Now.Minute + DateTime.Now.Second;
         }
 
     }
