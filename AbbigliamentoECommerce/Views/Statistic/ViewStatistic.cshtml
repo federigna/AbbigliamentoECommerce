@@ -1,5 +1,5 @@
-﻿@{ 
-    AbbigliamentoECommerce.Models.FilterStatistics wFilter =(AbbigliamentoECommerce.Models.FilterStatistics) ViewBag.FilterStastic;
+﻿@{
+    AbbigliamentoECommerce.Models.FilterStatistics wFilter = (AbbigliamentoECommerce.Models.FilterStatistics)ViewBag.FilterStastic;
 }
 <!DOCTYPE html>
 <html>
@@ -8,10 +8,38 @@
 </head>
 <body>
     <h1>Statistiche</h1>
-    
+
     <p>
-        @Html.Partial("_FilterStatistic", wFilter)
-        <img src="@Url.Action("BestSellingProduct")" alt="Bar Chart using MVC" />
-    </p>
-</body>
+        @switch (wFilter.NameStatistic)
+        {
+            case "BestSellingProduct":
+                using (Html.BeginForm("BestSellingProduct", "Statistic", FormMethod.Post, htmlAttributes: new { @class = "form" }))
+                {
+                    @Html.Partial("_FilterStatistic", wFilter)
+
+                    <img src="@wFilter.Chart.FileContents" alt="Bar Chart using MVC" />
+                <p>
+
+                    <div class="form-group"> <input type="submit" value="Cerca" class="btn-default pull-right" /> </div>
+                </p>
+            }
+                break;
+            case "BestSellingBrand":
+                @Html.Partial("_FilterStatistic", wFilter)
+                <img src="@Url.Action("BestSellingBrand")" alt="Bar Chart using MVC" />
+                break;
+            case "UserRegistred":
+                @Html.Partial("_FilterStatistic", wFilter)
+                <img src="@Url.Action("UserRegistred")" alt="Bar Chart using MVC" />
+                break;
+            case "GainByCategory":
+                @Html.Partial("_FilterStatistic", wFilter)
+                <img src="@Url.Action("GainByCategory")" alt="Bar Chart using MVC" />
+                break;
+
+
+        }
+
+        </p>
+    </body>
 </html>

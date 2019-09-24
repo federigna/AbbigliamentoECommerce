@@ -21,5 +21,15 @@ namespace AbbigliamentoECommerce.Converter
             }
             return wNewListCat;
         }
+
+        public static AbbigliamentoECommerceEntity.Category ConvertoCategoryModelTOCategoryEntity(Category pCat)
+        {
+            AbbigliamentoECommerceEntity.Category wSingleCat = new AbbigliamentoECommerceEntity.Category();
+              
+                wSingleCat.Id=pCat.Id;
+                wSingleCat.Description = pCat.Description;
+              
+            return wSingleCat;
+        }
     }
 }

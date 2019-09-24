@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace AbbigliamentoECommerce.Models
 {
@@ -21,6 +22,7 @@ namespace AbbigliamentoECommerce.Models
         public string Category { get; set; }
 
         public string NameStatistic { get; set; }
+        public FileContentResult Chart { get; set; }
 
     }
 }

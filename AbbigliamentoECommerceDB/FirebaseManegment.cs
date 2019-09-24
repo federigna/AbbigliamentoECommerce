@@ -38,7 +38,7 @@ namespace AbbigliamentoECommerceDB
             }
             return wApp;
         }
-        private FirestoreDb CreateInstanceDB()
+        public FirestoreDb CreateInstanceDB()
         {
             var appSettings = ConfigurationManager.AppSettings;
             string project = appSettings["URLIdProject"] ?? "Not Found";
