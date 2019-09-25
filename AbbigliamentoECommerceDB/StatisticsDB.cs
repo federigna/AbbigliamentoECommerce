@@ -34,15 +34,19 @@ namespace AbbigliamentoECommerceDB
                     foreach (string wKey in wProductArray.Keys)
                     {
                         Dictionary<string, object> filed = (Dictionary<string, object>)wProductArray[wKey];
-                        if (wListProd.ContainsKey(filed["categoria"].ToString().ToLower()))
+                        if (filed.ContainsKey("categoria") && filed.ContainsKey("quantita"))
                         {
-                            int pQuantity = Convert.ToInt32(wListProd[filed["categoria"].ToString().ToLower()]);
-                            pQuantity+= Convert.ToInt32(filed["quantita"]);
-                            wListProd[filed["categoria"].ToString().ToLower()] = pQuantity.ToString();
-                        }
-                        else
-                        {
-                            wListProd.Add(filed["categoria"].ToString().ToLower(), filed["quantita"].ToString());
+                            if (wListProd.ContainsKey(filed["categoria"].ToString().ToLower()))
+                            {
+                                int pQuantity = Convert.ToInt32(wListProd[filed["categoria"].ToString().ToLower()]);
+                                pQuantity += Convert.ToInt32(filed["quantita"]);
+                                wListProd[filed["categoria"].ToString().ToLower()] = pQuantity.ToString();
+                            }
+                            else
+                            {
+                                 wListProd.Add(filed["categoria"].ToString().ToLower(), filed["quantita"].ToString());
+                                
+                            }
                         }
                     }
                 }

@@ -1,4 +1,6 @@
-﻿using AbbigliamentoECommerce.Models;
+﻿using AbbigliamentoECommerce.Converter;
+using AbbigliamentoECommerce.Models;
+using AbbigliamentoECommerce.Utility;
 using AbbigliamentoECommerceBL;
 using System;
 using System.Collections.Generic;
@@ -13,20 +15,28 @@ namespace AbbigliamentoECommerce.Controllers
 {
     public class StatisticController : Controller
     {
-     
         // GET: Statistic
         public async Task<ActionResult> BestSellingProduct(FilterStatistics pFilter)
         {
-            StatisticBL wBL = new StatisticBL();
-            Dictionary<string,string> wChart= await wBL.BestSellingProduct(pFilter.Category, pFilter.Datastart, pFilter.DataEnd);
+            try
+            {
+                StatisticBL wBL = new StatisticBL();
+                Dictionary<string, string> wChart = await wBL.BestSellingProduct(pFilter.Category, pFilter.Datastart, pFilter.DataEnd);
 
-            var chart = new Chart(width: 300, height: 200)
-            .AddSeries(chartType: "column",
-                            xValue:wChart.Keys,
-                            yValues: wChart.Values)
-                            .GetBytes("png");
-            pFilter.Chart= base.File(chart, "image/bytes");
-            ViewBag.FilterStastic = pFilter;
+                var chart = new Chart(width: 300, height: 200)
+                .AddSeries(chartType: "column",
+                                xValue: wChart.Keys,
+                                yValues: wChart.Values)
+                                .GetBytes("png");
+                ViewBag.FilterStastic = Init("BestSellingProduct");
+                ViewBag.FilterStastic.Chart = base.File(chart, "image/bytes");
+               
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Errore in BestSellingProduct", ex);
+            }
+            
             return View("ViewStatistic");
         }
 
@@ -60,24 +70,26 @@ namespace AbbigliamentoECommerce.Controllers
             return base.File(chart, "image/bytes");
         }
 
-        public ActionResult ViewStatistic(string pNameStatistic)
+        public async Task<ActionResult> ViewStatistic(string pNameStatistic)
         {
-            //switch (pNameStatistic)
-            //{
-            //    case "BestSellingProduct":
-            //        return BestSellingProduct();
-            //    case "BestSellingBrand":
-            //        return BestSellingBrand();
-            //    case "UserRegistred":
-            //        return UserRegistred();
-            //    case "GainByCategory":
-            //        return GainByCategory();
-
-            //}
-            FilterStatistics wFilter = new FilterStatistics();
-            wFilter.NameStatistic = pNameStatistic;
-            ViewBag.FilterStastic = wFilter;
+            ViewBag.FilterStastic = await Init( pNameStatistic);
             return View();
+        }
+
+        private async Task<FilterStatistics> Init(string pNameStatistic)
+        {
+            try
+            {
+                FilterStatistics wFilter = new FilterStatistics();
+                wFilter.NameStatistic = pNameStatistic;
+                wFilter.Categories = CategoryEntityTOCategoryModel.ConvertoListCategoryEntityTOListCategoryModel(await new CategoryBL().GetCategory("Categorie"));
+                return wFilter;
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Inizializazione Filtri Statistici", ex);
+            }
+            return null;
         }
     }
 }

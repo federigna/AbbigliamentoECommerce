@@ -1,5 +1,6 @@
 ﻿@{
     AbbigliamentoECommerce.Models.FilterStatistics wFilter = (AbbigliamentoECommerce.Models.FilterStatistics)ViewBag.FilterStastic;
+
 }
 <!DOCTYPE html>
 <html>
@@ -17,28 +18,35 @@
                 {
                     @Html.Partial("_FilterStatistic", wFilter)
 
-                    <img src="@wFilter.Chart.FileContents" alt="Bar Chart using MVC" />
+                    if (wFilter.Chart != null)
+                    {
+                        var base64 = Convert.ToBase64String(wFilter.Chart.FileContents);
+                        var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+                        <center>
+                            <img src="@imgSrc" alt="Bar Chart using MVC" />
+                        </center>
+                    }
                 <p>
 
                     <div class="form-group"> <input type="submit" value="Cerca" class="btn-default pull-right" /> </div>
                 </p>
             }
-                break;
-            case "BestSellingBrand":
-                @Html.Partial("_FilterStatistic", wFilter)
-                <img src="@Url.Action("BestSellingBrand")" alt="Bar Chart using MVC" />
-                break;
-            case "UserRegistred":
-                @Html.Partial("_FilterStatistic", wFilter)
-                <img src="@Url.Action("UserRegistred")" alt="Bar Chart using MVC" />
-                break;
-            case "GainByCategory":
-                @Html.Partial("_FilterStatistic", wFilter)
-                <img src="@Url.Action("GainByCategory")" alt="Bar Chart using MVC" />
-                break;
+            break;
+        case "BestSellingBrand":
+            @Html.Partial("_FilterStatistic", wFilter)
+            <img src="@Url.Action("BestSellingBrand")" alt="Bar Chart using MVC" />
+            break;
+        case "UserRegistred":
+            @Html.Partial("_FilterStatistic", wFilter)
+            <img src="@Url.Action("UserRegistred")" alt="Bar Chart using MVC" />
+            break;
+        case "GainByCategory":
+            @Html.Partial("_FilterStatistic", wFilter)
+            <img src="@Url.Action("GainByCategory")" alt="Bar Chart using MVC" />
+            break;
 
 
-        }
+    }
 
         </p>
     </body>

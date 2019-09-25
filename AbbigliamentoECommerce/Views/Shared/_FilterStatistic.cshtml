@@ -1,41 +1,66 @@
 ﻿@model AbbigliamentoECommerce.Models.FilterStatistics
 
+<div class="row">
 
-    <div class="form-horizontal">
-        <h4>FilterStatistics</h4>
-        <hr />
-        
-        <div class="form-group">
-            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+    <fieldset>
+        <legend>FilterStatistics:</legend>
+
+        <div class="row">
+            <div class="col-md-3">
+
+                <dl class="dl-horizontal">
+                 
+                    <dt>
+                        @Html.LabelFor(model => model.Datastart, htmlAttributes: new { @class = "control-label col-md-2" })
+                    </dt>
+
+                    <dd>
+                        @Html.EditorFor(model => model.Datastart, new
+                   {
+                       @class = "datepicker",
+                       type = "datetime-local"
+                   })
+                        @Html.ValidationMessageFor(model => model.Datastart, "", new { @class = "text-danger" })
+                    </dd>
+                </dl>
+            </div>
+            <div class="col-md-3">
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.LabelFor(model => model.DataEnd, htmlAttributes: new { @class = "control-label col-md-2" })
+                    </dt>
+
+                    <dd>
+                        @Html.EditorFor(model => model.DataEnd, new
+                   {
+                       @class = "datepicker",
+                       type = "datetime-local"
+                   })
+                        @Html.ValidationMessageFor(model => model.DataEnd, "", new { @class = "text-danger" })
+                    </dd>
+                </dl>
+            </div>
+            <div class="col-md-3">
+                <dl class="dl-horizontal">
+
+                    <dt>
+                        @Html.LabelFor(model => model.Category, htmlAttributes: new { @class = "control-label col-md-2" })
+                    </dt>
+
+                    <dd>
+                        @Html.DropDownListFor(model => model.Category,
+                          new SelectList(
+               Model.Categories.Select(x => new { Value = x.Description, Text = x.Description }),
+               "Value",
+               "Text", Model.Category),"Seleziona Categoria")
+                        @*@Html.EditorFor(model => model.Category, new { htmlAttributes = new { @class = "form-control" } })*@
+                        @Html.ValidationMessageFor(model => model.Category, "", new { @class = "text-danger" })
+                    </dd>
+
+                </dl>
             </div>
         </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Datastart, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Datastart, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Datastart, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.DataEnd, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.DataEnd, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.DataEnd, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Category, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Category, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Category, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        </div>
+    </fieldset>
+</div>
 
 
