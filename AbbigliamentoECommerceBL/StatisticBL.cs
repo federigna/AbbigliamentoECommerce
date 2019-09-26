@@ -9,11 +9,16 @@ namespace AbbigliamentoECommerceBL
 {
     public class StatisticBL
     {
-        public async Task<Dictionary<string, string>> BestSellingProduct(string pCat, DateTime pDateStart, DateTime pDateEnd)
+        public async Task<Dictionary<string, string>> BestSellingProduct(string pCat, DateTime pDateStart, DateTime pDateEnd, string pFieldKey)
         {
             StatisticsDB wDB = new StatisticsDB();
-           return await wDB.BestSellingProduct(pCat, pDateStart,pDateEnd);
+            return await wDB.BestSellingProduct(pCat, pDateStart, pDateEnd, pFieldKey);
 
+        }
+        public async Task<Dictionary<string, string>> UserRegistred(DateTime pDateStart, DateTime pDateEnd)
+        {
+            StatisticsDB wDB = new StatisticsDB();
+            return await wDB.UserRegistred(pDateStart, pDateEnd);
         }
     }
 }

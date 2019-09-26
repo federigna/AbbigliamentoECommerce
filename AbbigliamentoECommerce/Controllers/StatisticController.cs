@@ -21,7 +21,7 @@ namespace AbbigliamentoECommerce.Controllers
             try
             {
                 StatisticBL wBL = new StatisticBL();
-                Dictionary<string, string> wChart = await wBL.BestSellingProduct(pFilter.Category, pFilter.Datastart, pFilter.DataEnd);
+                Dictionary<string, string> wChart = await wBL.BestSellingProduct(pFilter.Category, pFilter.Datastart, pFilter.DataEnd, "categoria");
 
                 var chart = new Chart(width: 300, height: 200)
                 .AddSeries(chartType: "column",
@@ -30,34 +30,60 @@ namespace AbbigliamentoECommerce.Controllers
                                 .GetBytes("png");
                 ViewBag.FilterStastic = Init("BestSellingProduct");
                 ViewBag.FilterStastic.Chart = base.File(chart, "image/bytes");
-               
+
             }
             catch (Exception ex)
             {
                 Log.Error("Errore in BestSellingProduct", ex);
             }
-            
+
             return View("ViewStatistic");
         }
 
-        public ActionResult BestSellingBrand()
+        public async Task<ActionResult> BestSellingBrand(FilterStatistics pFilter)
         {
-            var chart = new Chart(width: 300, height: 200)
-            .AddSeries(chartType: "pie",
-                            xValue: new[] { "gonna", "maglia", "pantalone" },
-                            yValues: new[] { "30", "40", "20" })
-                            .GetBytes("png");
-            return base.File(chart, "image/bytes");
-        }
+            try
+            {
+                StatisticBL wBL = new StatisticBL();
+                Dictionary<string, string> wChart = await wBL.BestSellingProduct(pFilter.Category, pFilter.Datastart, pFilter.DataEnd, "marca");
 
-        public ActionResult UserRegistred()
-        {
-            var chart = new Chart(width: 300, height: 200)
+                var chart = new Chart(width: 300, height: 200)
+                .AddSeries(chartType: "pie",
+                                 xValue: wChart.Keys,
+                                   yValues: wChart.Values)
+                                .GetBytes("png");
+                ViewBag.FilterStastic = Init("BestSellingBrand");
+                ViewBag.FilterStastic.Chart = base.File(chart, "image/bytes");
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Errore in BestSellingBrand", ex);
+            }
+
+            return View("ViewStatistic");
+        }
+        
+            public async Task<ActionResult> UserRegistred(FilterStatistics pFilter)
+            {
+                try
+                {
+                    StatisticBL wBL = new StatisticBL();
+                    Dictionary<string, string> wChart = await wBL.BestSellingProduct(pFilter.Category, pFilter.Datastart, pFilter.DataEnd, "marca");
+
+                    var chart = new Chart(width: 300, height: 200)
             .AddSeries(chartType: "line",
-                            xValue: new[] { "gonna", "maglia", "pantalone" },
-                            yValues: new[] { "30", "40", "20" })
+                           xValue: wChart.Keys,
+                                   yValues: wChart.Values)
                             .GetBytes("png");
-            return base.File(chart, "image/bytes");
+                ViewBag.FilterStastic = Init("UserRegistred");
+                ViewBag.FilterStastic.Chart = base.File(chart, "image/bytes");
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Errore in UserRegistred", ex);
+            }
+
+            return View("ViewStatistic");
         }
 
         public ActionResult GainByCategory()
@@ -72,7 +98,7 @@ namespace AbbigliamentoECommerce.Controllers
 
         public async Task<ActionResult> ViewStatistic(string pNameStatistic)
         {
-            ViewBag.FilterStastic = await Init( pNameStatistic);
+            ViewBag.FilterStastic = await Init(pNameStatistic);
             return View();
         }
 
