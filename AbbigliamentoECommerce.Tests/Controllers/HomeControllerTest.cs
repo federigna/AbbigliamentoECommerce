@@ -7,6 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using AbbigliamentoECommerce;
 using AbbigliamentoECommerce.Controllers;
 using System.Threading.Tasks;
+using AbbigliamentoECommerce.Models;
 
 namespace AbbigliamentoECommerce.Tests.Controllers
 {
@@ -14,42 +15,33 @@ namespace AbbigliamentoECommerce.Tests.Controllers
     public class HomeControllerTest
     {
         [TestMethod]
-        public void Index()
+        //Autenticazione avvenuta con successo
+        public async void Login()
         {
             // Arrange
             HomeController controller = new HomeController();
-
-            // Act
-            //ViewResult result = controller.Index() as ViewResult;
-
+            LoggedUser wLogUser = new LoggedUser();
+            wLogUser.Email = "test@test.com";
+            wLogUser.Password = "asdasd";
+            ViewResult result= await controller.Login() as ViewResult;
+            wLogUser = result.Model as LoggedUser;
             // Assert
-            Assert.IsNotNull(true);
+            Assert.IsFalse(string.IsNullOrEmpty(wLogUser.wDetailUser.Id));
         }
 
         [TestMethod]
-        public void About()
+        //Autentizacione Fallita
+        public async void LoginFailed()
         {
             // Arrange
             HomeController controller = new HomeController();
-
-            // Act
-            ViewResult result = controller.About() as ViewResult;
-
+            LoggedUser wLogUser = new LoggedUser();
+            wLogUser.Email = "test@test.com";
+            wLogUser.Password = "asd";
+            ViewResult result = await controller.Login() as ViewResult;
+            wLogUser = result.Model as LoggedUser;
             // Assert
-            Assert.AreEqual("Your application description page.", result.ViewBag.Message);
-        }
-
-        [TestMethod]
-        public async Task Contact()
-        {
-            // Arrange
-            HomeController controller = new HomeController();
-
-            // Act
-            Task<ActionResult> result = controller.Login() as Task<ActionResult>;
-
-            // Assert
-            Assert.IsNotNull(result);
+            Assert.IsTrue(string.IsNullOrEmpty(wLogUser.wDetailUser.Id));
         }
     }
 }

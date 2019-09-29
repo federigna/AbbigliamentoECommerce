@@ -89,6 +89,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\ProductControllerTest.cs" />
+    <Compile Include="Controllers\CartControllerTest.cs" />
+    <Compile Include="Controllers\StatisticControllerTest.cs" />
+    <Compile Include="Controllers\UserControllerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controllers\HomeControllerTest.cs" />
   </ItemGroup>
@@ -99,6 +103,14 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AbbigliamentoECommerceBL\AbbigliamentoECommerceBL.csproj">
+      <Project>{70676ed2-be9e-45e7-88f7-bbf8efcba78e}</Project>
+      <Name>AbbigliamentoECommerceBL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AbbigliamentoECommerceEntity\AbbigliamentoECommerceEntity.csproj">
+      <Project>{9e0fb43e-cbff-4b11-9d18-50e255cc05bf}</Project>
+      <Name>AbbigliamentoECommerceEntity</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AbbigliamentoECommerce\AbbigliamentoECommerce.csproj">
       <Project>{E05A49D7-91E7-473D-95BA-80998213CE7B}</Project>
       <Name>AbbigliamentoECommerce</Name>
