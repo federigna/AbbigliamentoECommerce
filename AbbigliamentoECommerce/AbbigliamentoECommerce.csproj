@@ -302,6 +302,7 @@
     <Compile Include="Models\BaseClass.cs" />
     <Compile Include="Models\Cart.cs" />
     <Compile Include="Models\Category.cs" />
+    <Compile Include="Models\FilterStatistics2.cs" />
     <Compile Include="Models\FilterStatistics.cs" />
     <Compile Include="Models\DetailCart.cs" />
     <Compile Include="Models\ImageHelper.cs" />
@@ -447,6 +448,7 @@
     <Content Include="Views\Cart\SuccessView.cshtml" />
     <Content Include="Views\Cart\FailureView.cshtml" />
     <Content Include="Views\Shared\_FilterStatistic.cshtml" />
+    <Content Include="Views\Shared\_FilterStatistic2.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
