@@ -194,7 +194,7 @@ namespace AbbigliamentoECommerce.Controllers
             try
             {
                 Log.Info("Tentativo invio mail per ordine " + wNumOrder);
-                MailManagment.SendEmail(wPFD.Name, wLogUser);
+                MailManagment.SendEmail(wPFD.Name, wLogUser.Email,wLogUser.wDetailUser.Name,wLogUser.wDetailUser.Surname);
             }
             catch (Exception ex)
             {

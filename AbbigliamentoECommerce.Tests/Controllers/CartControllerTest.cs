@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.IO;
+using System.Threading.Tasks;
 using AbbigliamentoECommerce.Models;
 using AbbigliamentoECommerce.Utility;
 using AbbigliamentoECommerceBL;
@@ -12,18 +13,15 @@ namespace AbbigliamentoECommerce.Tests.Controllers
     [TestClass]
     public class CartControllerTest
     {
-        [TestMethod]
-        //Transazione riuscita
-        public async void PaymentWithPaypal()
-        {
-            Assert.IsTrue(true);
-        }
+        
 
         [TestMethod]
-        public async void SendMail()
+        public async Task SendMail()
         {
 
             string wNumOrder = "12365";
+            UserBL userBL = new UserBL();
+            userBL.SetGoogleCedential();
             var appSettings = ConfigurationManager.AppSettings;
             string wUrlPDF = appSettings["UlrPDF"];
             FileStream wPFD = ManagementDocument.CreateOrderDocument(wUrlPDF, wNumOrder, await new CartBL().GetCartByUser("asfffkjoqejf9f"),
@@ -32,10 +30,11 @@ namespace AbbigliamentoECommerce.Tests.Controllers
             bool sendEmail = false;
             try
             {
-                LoggedUser wUser = new LoggedUser();
-                wUser.Email = "federigna@hotmail.it";
-                
-                MailManagment.SendEmail(wPFD.Name, wUser);
+                string wEmail = "federigna@hotmail.it";
+                string wName = "fede";
+                string wsurname = "fede";
+
+                MailManagment.SendEmail(wPFD.Name, wEmail, wName, wsurname);
             }
             catch (Exception ex)
             {

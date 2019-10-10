@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AbbigliamentoECommerceDB", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AbbigliamentoECommerceBL", "AbbigliamentoECommerceBL\AbbigliamentoECommerceBL.csproj", "{70676ED2-BE9E-45E7-88F7-BBF8EFCBA78E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AbbigliamentoECommerceEntity", "AbbigliamentoECommerceEntity\AbbigliamentoECommerceEntity.csproj", "{9E0FB43E-CBFF-4B11-9D18-50E255CC05BF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AbbigliamentoECommerceEntity", "AbbigliamentoECommerceEntity\AbbigliamentoECommerceEntity.csproj", "{9E0FB43E-CBFF-4B11-9D18-50E255CC05BF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

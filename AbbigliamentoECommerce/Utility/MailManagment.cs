@@ -11,7 +11,8 @@ namespace AbbigliamentoECommerce.Utility
 {
     public static class MailManagment
     {
-        public static bool SendEmail( string pPathOrderPDF, LoggedUser pLoggedUser)
+        public static bool SendEmail( string pPathOrderPDF, string pEmailTOUser,
+            string pName, string pCognome)
         {
             try
             {
@@ -23,15 +24,15 @@ namespace AbbigliamentoECommerce.Utility
                 string wSubjectMail = appSettings["SubjectMail"];
                 string wBodyMail = appSettings["BodyMail"];
 
-                if (pLoggedUser != null)
+                if (pEmailTOUser != null)
                 {
                     MailMessage message = new MailMessage();
                     SmtpClient smtp = new SmtpClient();
                     message.From = new MailAddress(wUserMail);
-                    message.To.Add(new MailAddress(pLoggedUser.Email));
+                    message.To.Add(new MailAddress(pEmailTOUser));
                     message.Subject = wSubjectMail;
                     message.IsBodyHtml = true; //to make message body as html  
-                    message.Body = wBodyMail.Replace("[NomeUtente]", pLoggedUser.wDetailUser.Name + " " + pLoggedUser.wDetailUser.Surname);
+                    message.Body = wBodyMail.Replace("[NomeUtente]", pName + " " + pCognome);
                     Attachment wAttach = new Attachment(pPathOrderPDF);
                     message.Attachments.Add(wAttach);
 

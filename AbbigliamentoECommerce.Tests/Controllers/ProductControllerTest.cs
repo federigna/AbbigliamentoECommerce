@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AbbigliamentoECommerce.Controllers;
 using AbbigliamentoECommerce.Models;
+using AbbigliamentoECommerceBL;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace AbbigliamentoECommerce.Tests.Controllers
@@ -12,11 +14,12 @@ namespace AbbigliamentoECommerce.Tests.Controllers
     {
         [TestMethod]
         //Non impostare filtri e premere CERCA
-        public async void Search()
+        public async Task Search()
         {
             // Arrange
             ProductController controller = new ProductController();
-
+            UserBL userBL = new UserBL();
+            userBL.SetGoogleCedential();
             ViewResult result = await controller.Search(new Models.SearchProduct()) as ViewResult;
             // Act
             //ViewResult result = controller.Index() as ViewResult;
@@ -27,9 +30,11 @@ namespace AbbigliamentoECommerce.Tests.Controllers
 
         [TestMethod]
         //Filtro per Categoria e premere CERCA
-        public async void Search_1()
+        public async Task Search_1()
         {
             // Arrange
+            UserBL userBL = new UserBL();
+            userBL.SetGoogleCedential();
             ProductController controller = new ProductController();
             Models.SearchProduct wFilter = new Models.SearchProduct();
             wFilter.Category = "Donna";
@@ -43,9 +48,11 @@ namespace AbbigliamentoECommerce.Tests.Controllers
 
         [TestMethod]
         //Filtro per Marca e premere CERCA
-        public async void Search_2()
+        public async Task Search_2()
         {
             // Arrange
+            UserBL userBL = new UserBL();
+            userBL.SetGoogleCedential();
             ProductController controller = new ProductController();
             Models.SearchProduct wFilter = new Models.SearchProduct();
             wFilter.Brand = "armani";
@@ -58,9 +65,11 @@ namespace AbbigliamentoECommerce.Tests.Controllers
         }
         [TestMethod]
         //Filtro per Modello e premere CERCA
-        public async void Search_4()
+        public async Task Search_4()
         {
             // Arrange
+            UserBL userBL = new UserBL();
+            userBL.SetGoogleCedential();
             ProductController controller = new ProductController();
             Models.SearchProduct wFilter = new Models.SearchProduct();
             wFilter.Model = "Gonna";
@@ -74,9 +83,11 @@ namespace AbbigliamentoECommerce.Tests.Controllers
 
         [TestMethod]
         //Filtro per Taglia e premere CERCA
-        public async void Search_5()
+        public async Task Search_5()
         {
             // Arrange
+            UserBL userBL = new UserBL();
+            userBL.SetGoogleCedential();
             ProductController controller = new ProductController();
             Models.SearchProduct wFilter = new Models.SearchProduct();
             wFilter.Headmoney = "L";
@@ -90,9 +101,11 @@ namespace AbbigliamentoECommerce.Tests.Controllers
 
         [TestMethod]
         //Filtro per Colore e premere CERCA
-        public async void Search_6()
+        public async Task Search_6()
         {
             // Arrange
+            UserBL userBL = new UserBL();
+            userBL.SetGoogleCedential();
             ProductController controller = new ProductController();
             Models.SearchProduct wFilter = new Models.SearchProduct();
             wFilter.Color = "Nero";
@@ -106,9 +119,11 @@ namespace AbbigliamentoECommerce.Tests.Controllers
 
         [TestMethod]
         //Filtro per Nome Prdotto e premere CERCA
-        public async void Search_7()
+        public async Task Search_7()
         {
             // Arrange
+            UserBL userBL = new UserBL();
+            userBL.SetGoogleCedential();
             ProductController controller = new ProductController();
             Models.SearchProduct wFilter = new Models.SearchProduct();
             wFilter.ProductName = "polo";
@@ -122,9 +137,11 @@ namespace AbbigliamentoECommerce.Tests.Controllers
 
         [TestMethod]
         //Filtri e premere CERCA
-        public async void Search_8()
+        public async Task Search_8()
         {
             // Arrange
+            UserBL userBL = new UserBL();
+            userBL.SetGoogleCedential();
             ProductController controller = new ProductController();
             Models.SearchProduct wFilter = new Models.SearchProduct();
             wFilter.Category = "donna";

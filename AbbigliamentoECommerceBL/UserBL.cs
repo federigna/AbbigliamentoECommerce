@@ -21,5 +21,19 @@ namespace AbbigliamentoECommerceBL
             return await wDB.SignIn(pEmail, pPassword);
 
         }
+
+        public async Task<User> GetUser(string pId)
+        {
+            FirebaseManegment wDB = new FirebaseManegment();
+            return await wDB.GetUser(pId);
+
+        }
+
+        public async void SetGoogleCedential()
+        {
+            FirebaseManegment wDB = new FirebaseManegment();
+             wDB.CreateFirebaseApp();
+
+        }
     }
 }

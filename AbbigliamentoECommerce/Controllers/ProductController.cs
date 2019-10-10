@@ -60,7 +60,7 @@ namespace AbbigliamentoECommerce.Controllers
                     string pathImage = appSetting["PathImage"];
                     collection.Image = pathImage + collection.ImageFile.FileName;
                     collection.ImageFile.SaveAs(collection.Image);
-                    wDB.InsertProduct(ProductEntityToProductModel.ConvertoProdyctEntityTOProductModel(collection), "").Wait();
+                    await wDB.InsertProduct(ProductEntityToProductModel.ConvertoProdyctEntityTOProductModel(collection), "");
                     return RedirectToAction("Home");
                 }
                 else

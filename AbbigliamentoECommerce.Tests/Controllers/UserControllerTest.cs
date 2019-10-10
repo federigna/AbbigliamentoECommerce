@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AbbigliamentoECommerce.Controllers;
 using AbbigliamentoECommerce.Models;
+using AbbigliamentoECommerceBL;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace AbbigliamentoECommerce.Tests.Controllers
@@ -11,9 +13,11 @@ namespace AbbigliamentoECommerce.Tests.Controllers
     {
         [TestMethod]
         //Iscrizione Corretta
-        public async void Create()
+        public async Task Create()
         {
             // Arrange
+            UserBL userBL = new UserBL();
+            userBL.SetGoogleCedential();
             UserController controller = new UserController();
             User wUser = new User();
             wUser.Address = "Via Test";
@@ -34,9 +38,11 @@ namespace AbbigliamentoECommerce.Tests.Controllers
 
         [TestMethod]
         //Iscrizione fallita
-        public async void CreateFail()
+        public async Task CreateFail()
         {
             // Arrange
+            UserBL userBL = new UserBL();
+            userBL.SetGoogleCedential();
             UserController controller = new UserController();
             User wUser = new User();
             wUser.Address = "Via Test";

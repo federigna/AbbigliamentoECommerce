@@ -19,7 +19,7 @@ namespace AbbigliamentoECommerceDB
 {
     public class FirebaseManegment
     {
-        private FirebaseApp CreateFirebaseApp()
+        public FirebaseApp CreateFirebaseApp()
         {
             var appSettings = ConfigurationManager.AppSettings;
             string result = appSettings["URLFirestoreDB"] ?? "Not Found";
@@ -102,18 +102,18 @@ namespace AbbigliamentoECommerceDB
             var stream = File.Open(pProduct.UrlDownloadWeb, FileMode.Open);
 
 
-            var app =
-              new FirebaseStorageOptions()
-              {
-                  AuthTokenAsyncFactory = () => Task.FromResult(pToken)
-              };
+            //var app =
+            //  new FirebaseStorageOptions()
+            //  {
+            //      AuthTokenAsyncFactory = () => Task.FromResult(pToken)
+            //  };
             // Constructr FirebaseStorage, path to where you want to upload the file and Put it there
-            var task = new FirebaseStorage(wAppSpot, app)
-                .Child(pProduct.categoria)
-                .Child(pProduct.marca)
+            var task = new FirebaseStorage(wAppSpot)
+                .Child(pProduct.modello.ToLower())
+                .Child(pProduct.marca.ToLower())
                 .Child(stream.Name)
                 .PutAsync(stream);
-
+            task.Progress.ProgressChanged += (s, e) => Console.WriteLine($"Progress: {e.Percentage} %");
             // await the task to wait until upload completes and get the download url
             var downloadUrl = await task;
 
@@ -127,6 +127,7 @@ namespace AbbigliamentoECommerceDB
                     { "prezzo",pProduct.prezzo },
                     { "nome",pProduct.nome },
                     { "taglia",pProduct.taglia },
+                    { "modello",pProduct.modello },
                     {"Quantity",pProduct.Quantity },
                     { "urlDownload",stream.Name },
                     { "urlDownloadWeb",downloadUrl },
@@ -460,6 +461,43 @@ namespace AbbigliamentoECommerceDB
 
             }
             catch (Exception)
+            {
+
+                throw;
+            }
+            return wUser;
+        }
+
+        public async Task<AbbigliamentoECommerceEntity.User> GetUser(string pId)
+        {
+            FirestoreDb db = CreateInstanceDB();
+            AbbigliamentoECommerceEntity.User wUser = new AbbigliamentoECommerceEntity.User();
+            var appSettings = ConfigurationManager.AppSettings;
+            string wApiKey = appSettings["FirebaseApiKey"] ?? "Not Found";
+           // var authProvider = new FirebaseAuthProvider(new FirebaseConfig(wApiKey));
+            try
+            {
+                //recupero del uid utente per recuperare tutte le info del'utente loggato
+                 DocumentReference wDocRef = db.Collection("user").Document(pId);
+
+                DocumentSnapshot snapshot = await wDocRef.GetSnapshotAsync();
+                if (snapshot.Exists)
+                {
+                    wUser.Address = snapshot.ContainsField("Address") ? snapshot.GetValue<string>("Address") : "";
+                    wUser.City = snapshot.ContainsField("City") ? snapshot.GetValue<string>("City") : "";
+                    wUser.cognome = snapshot.ContainsField("cognome") ? snapshot.GetValue<string>("cognome") : "";
+                    wUser.DateOfBirth = snapshot.ContainsField("DateOfBirth") ? snapshot.GetValue<DateTime>("DateOfBirth") : DateTime.MinValue;
+                    wUser.District = snapshot.ContainsField("District") ? snapshot.GetValue<string>("District") : "";
+                    wUser.email = snapshot.ContainsField("email") ? snapshot.GetValue<string>("email") : "";
+                    wUser.Id = pId;
+                    wUser.nome = snapshot.ContainsField("nome") ? snapshot.GetValue<string>("nome") : "";
+                    wUser.Ruolo = snapshot.ContainsField("Ruolo") ? snapshot.GetValue<string>("Ruolo") : "cliente";
+                    wUser.TelefoneNumber = snapshot.ContainsField("TelefoneNumber") ? snapshot.GetValue<string>("TelefoneNumber") : "";
+
+                }
+
+            }
+            catch (Exception ex)
             {
 
                 throw;

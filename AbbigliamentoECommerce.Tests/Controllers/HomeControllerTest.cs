@@ -8,6 +8,7 @@ using AbbigliamentoECommerce;
 using AbbigliamentoECommerce.Controllers;
 using System.Threading.Tasks;
 using AbbigliamentoECommerce.Models;
+using AbbigliamentoECommerceBL;
 
 namespace AbbigliamentoECommerce.Tests.Controllers
 {
@@ -16,14 +17,16 @@ namespace AbbigliamentoECommerce.Tests.Controllers
     {
         [TestMethod]
         //Autenticazione avvenuta con successo
-        public async void Login()
+        public async Task Login()
         {
             // Arrange
+            UserBL userBL = new UserBL();
+            userBL.SetGoogleCedential();
             HomeController controller = new HomeController();
             LoggedUser wLogUser = new LoggedUser();
-            wLogUser.Email = "test@test.com";
+            wLogUser.Email = "test@test.it";
             wLogUser.Password = "asdasd";
-            ViewResult result= await controller.Login() as ViewResult;
+            ViewResult result= await controller.Login(wLogUser) as ViewResult;
             wLogUser = result.Model as LoggedUser;
             // Assert
             Assert.IsFalse(string.IsNullOrEmpty(wLogUser.wDetailUser.Id));
@@ -31,17 +34,19 @@ namespace AbbigliamentoECommerce.Tests.Controllers
 
         [TestMethod]
         //Autentizacione Fallita
-        public async void LoginFailed()
+        public async Task LoginFailed()
         {
             // Arrange
+            UserBL userBL = new UserBL();
+            userBL.SetGoogleCedential();
             HomeController controller = new HomeController();
             LoggedUser wLogUser = new LoggedUser();
             wLogUser.Email = "test@test.com";
             wLogUser.Password = "asd";
-            ViewResult result = await controller.Login() as ViewResult;
+            ViewResult result = await controller.Login(wLogUser) as ViewResult;
             wLogUser = result.Model as LoggedUser;
             // Assert
-            Assert.IsTrue(string.IsNullOrEmpty(wLogUser.wDetailUser.Id));
+            Assert.IsTrue(wLogUser.wDetailUser==null);
         }
     }
 }

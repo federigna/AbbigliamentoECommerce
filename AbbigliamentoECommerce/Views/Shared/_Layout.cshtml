@@ -24,9 +24,10 @@
 
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Statistiche<span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu">
-                                    <li><a href="#">@Html.ActionLink("Prodotto più venduto", "ViewStatistic", "Statistic",new {pNameStatistic= "BestSellingProduct" },null)</a></li>
+                                    <li><a href="#">@Html.ActionLink("Prodotto più venduto", "ViewStatistic", "Statistic", new { pNameStatistic = "BestSellingProduct" }, null)</a></li>
                                     <li><a href="#">@Html.ActionLink("Marca più venduto", "ViewStatistic", "Statistic", new { pNameStatistic = "BestSellingBrand" }, null)</a></li>
                                     <li><a href="#">@Html.ActionLink("Incasso per categoria", "ViewStatistic", "Statistic", new { pNameStatistic = "GainByCategory" }, null)</a></li>
+                                    <li><a href="#">@Html.ActionLink("Utenti Registrati", "ViewStatistic", "Statistic", new { pNameStatistic = "UserRegistred" }, null)</a></li>
                                     <li><a href="#">@Html.ActionLink("Inserisci Prodotto", "Create", "Product")</a></li>
                                 </ul>
                             </li>

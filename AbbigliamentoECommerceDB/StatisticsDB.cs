@@ -61,9 +61,9 @@ namespace AbbigliamentoECommerceDB
                 {
                     if (wListProd.ContainsKey(documentSnapshot.GetValue<string>("Ruolo").ToLower()))
                     {
-                        int pQuantity = Convert.ToInt32(documentSnapshot.GetValue<string>("Ruolo").ToLower());
+                        int pQuantity = Convert.ToInt32(wListProd[documentSnapshot.GetValue<string>("Ruolo").ToLower()]);
                         pQuantity += 1;
-                        wListProd[documentSnapshot.GetValue<string>("Ruolo").ToLower()] = pQuantity.ToString();
+                        wListProd[documentSnapshot.GetValue<string>("Ruolo").ToLower()] += pQuantity.ToString();
                     }
                     else
                     {
