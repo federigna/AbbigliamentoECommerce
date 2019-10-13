@@ -15,6 +15,10 @@ namespace AbbigliamentoECommerce.Controllers
     {
         public async Task<ActionResult> Index(AbbigliamentoECommerce.Models.SearchProduct pProd)
         {
+            try
+            {
+
+            
             ViewBag.ListProducts = TempData["ListProducts"];
             pProd.Brands = CategoryEntityTOCategoryModel.ConvertoListCategoryEntityTOListCategoryModel(await new CategoryBL().GetCategory("marca"));
             pProd.Colors = CategoryEntityTOCategoryModel.ConvertoListCategoryEntityTOListCategoryModel(await new CategoryBL().GetCategory("Colori"));
@@ -22,6 +26,13 @@ namespace AbbigliamentoECommerce.Controllers
             pProd.Headmoneies = CategoryEntityTOCategoryModel.ConvertoListCategoryEntityTOListCategoryModel(await new CategoryBL().GetCategory("Taglie"));
             pProd.Models = CategoryEntityTOCategoryModel.ConvertoListCategoryEntityTOListCategoryModel(await new CategoryBL().GetCategory("Modelli"));
             return View("Index",pProd);
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Errore in fase di caricamneto HomePage", ex);
+                ViewBag.ErrorMessage = "Username o Password errati";
+                return View("Index", pProd);
+            }
         }
 
         public ActionResult About()

@@ -12,13 +12,22 @@ namespace AbbigliamentoECommerceBL
         public async Task<Dictionary<string, string>> BestSellingProduct(string pCat, DateTime pDateStart, DateTime pDateEnd, string pFieldKey)
         {
             StatisticsDB wDB = new StatisticsDB();
-            return await wDB.BestSellingProduct(pCat, pDateStart, pDateEnd, pFieldKey);
-
+            if (!string.IsNullOrEmpty(pCat) && pDateEnd != DateTime.MinValue &&
+                pDateStart != DateTime.MinValue)
+            {
+                return await wDB.BestSellingProduct(pCat, pDateStart, pDateEnd, pFieldKey);
+            }
+            return new Dictionary<string, string>();
         }
         public async Task<Dictionary<string, string>> UserRegistred(DateTime pDateStart, DateTime pDateEnd)
         {
             StatisticsDB wDB = new StatisticsDB();
-            return await wDB.UserRegistred(pDateStart, pDateEnd);
+            if ( pDateEnd != DateTime.MinValue &&
+               pDateStart != DateTime.MinValue)
+            {
+                return await wDB.UserRegistred(pDateStart, pDateEnd);
+            }
+            return new Dictionary<string, string>();
         }
     }
 }

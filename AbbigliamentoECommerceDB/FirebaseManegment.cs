@@ -19,6 +19,10 @@ namespace AbbigliamentoECommerceDB
 {
     public class FirebaseManegment
     {
+        //Crea il FirebaseApp tramite il nome del DB configurato da webConfig
+        //Per creare l'istanza di questo DB si utilizzano le Default Credential se
+        //queste sono già utilizzate, altrimenti si recuperano del file json di configurazione
+        //che si trova al percorso indicato dal URLFirestoreDB.
         public FirebaseApp CreateFirebaseApp()
         {
             var appSettings = ConfigurationManager.AppSettings;
@@ -38,6 +42,7 @@ namespace AbbigliamentoECommerceDB
             }
             return wApp;
         }
+
         public FirestoreDb CreateInstanceDB()
         {
             var appSettings = ConfigurationManager.AppSettings;
@@ -46,13 +51,17 @@ namespace AbbigliamentoECommerceDB
             FirestoreDb db = FirestoreDb.Create(project);
             return db;
         }
+
         public async Task<WriteResult> InsertUser(AbbigliamentoECommerceEntity.User pUser)
         {
             FirebaseApp wApp = CreateFirebaseApp();
             FirestoreDb db = CreateInstanceDB();
             var appSettings = ConfigurationManager.AppSettings;
             string apiKey = appSettings["FirebaseApiKey"] ?? "Not Found";
-
+            //per creare l'username e la password di accesso all'applicazione
+            //è necessario utilizzare UserRecordArgs valorizzando le properties con i valori inseriti
+            //dall'utente di fase di registrazione
+            //si è deciso di usare un autenticazione di tipo email e password
             UserRecordArgs args = new UserRecordArgs()
             {
                 Email = pUser.email,
@@ -62,14 +71,11 @@ namespace AbbigliamentoECommerceDB
                 DisplayName = pUser.nome,
                 Disabled = false,
             };
-            //var authProvider = new FirebaseAuthProvider(new FirebaseConfig(apiKey));
-
-            //var auth = authProvider.CreateUserWithEmailAndPasswordAsync(args.Email, args.Password).Result;
-            
+            //viene creato un record nell'Authentication di Firebase tramite un account amministrativ
             UserRecord userRecord = await FirebaseAdmin.Auth.FirebaseAuth.GetAuth(wApp).CreateUserAsync(args);
-            // See the UserRecord reference doc for the contents of userRecord.
-            //Console.WriteLine($"Successfully created new user: {userRecord.Uid}");
-
+            
+           // se la registrazione dell'email e password avviene correttamente si procederà
+           //accedendo al catalogo User e compilando le informazioni mancanti
             //GetData
             DocumentReference wDocRef = db.Collection("user").Document(userRecord.Uid);
             
@@ -86,15 +92,13 @@ namespace AbbigliamentoECommerceDB
                     { "Ruolo","Cliente" },
                 };
             return await wDocRef.SetAsync(wDictionaryUser);
-
-            //End get Data
-
-           // return wWResult;
+            
         }
         public async Task InsertProduct(Product pProduct, string pToken)
         {
             var appSettings = ConfigurationManager.AppSettings;
-
+            //per il caricamento del prodotto è necessario prima caricare l'immagine nello Storage
+            //il cui percorso è stato configurato da web.config StorageAppspot
             string wAppSpot = appSettings["StorageAppspot"] ?? "Not Found";
 
             FirestoreDb db = CreateInstanceDB();
@@ -102,11 +106,6 @@ namespace AbbigliamentoECommerceDB
             var stream = File.Open(pProduct.UrlDownloadWeb, FileMode.Open);
 
 
-            //var app =
-            //  new FirebaseStorageOptions()
-            //  {
-            //      AuthTokenAsyncFactory = () => Task.FromResult(pToken)
-            //  };
             // Constructr FirebaseStorage, path to where you want to upload the file and Put it there
             var task = new FirebaseStorage(wAppSpot)
                 .Child(pProduct.modello.ToLower())
@@ -117,6 +116,8 @@ namespace AbbigliamentoECommerceDB
             // await the task to wait until upload completes and get the download url
             var downloadUrl = await task;
 
+            //se l'inserimento dell'immagine va a buon fine verrà recuperata la WebDownloadUrl 
+            //che verrà salvata nel campo di riferimento nel catalogo prodotto
             DocumentReference wDocRef = db.Collection("prodotto").Document();
             DocumentSnapshot snapshot = await wDocRef.GetSnapshotAsync();
 
@@ -126,6 +127,7 @@ namespace AbbigliamentoECommerceDB
                     { "marca",pProduct.marca },
                     { "prezzo",pProduct.prezzo },
                     { "nome",pProduct.nome },
+                    { "colore",pProduct.colore },
                     { "taglia",pProduct.taglia },
                     { "modello",pProduct.modello },
                     {"Quantity",pProduct.Quantity },
@@ -156,6 +158,7 @@ namespace AbbigliamentoECommerceDB
             }
             return wListProd;
         }
+        //recupera il prodotto tramite uid per la gestione del dettaglio prodotto
         public async Task<Product> GetProductById(string pId)
         {
             Product wProd = new Product();
@@ -179,23 +182,25 @@ namespace AbbigliamentoECommerceDB
 
             return wProd;
         }
+        //recupera i prodotti in base ai filtri passati come parametro  tramite Product
+        //limit indica il numero massimo di elementi da visualizzare per pagina
         public async Task<List<Product>> GetProducts(Product product, int pLimit)
         {
-            pLimit = pLimit == 0 ? 4 : pLimit + 4;
+            ///pLimit = pLimit == 0 ? 4 : pLimit + 4;
 
             List<Product> wListProd = new List<Product>();
             FirestoreDb db = CreateInstanceDB();
-            Query allProductsQuery = null;
-            if (pLimit == 4)
-            {
-                allProductsQuery = db.Collection("prodotto").Limit(pLimit);
+            Query allProductsQuery = db.Collection("prodotto");
+            //if (pLimit == 4)
+            //{
+            //    allProductsQuery = db.Collection("prodotto").Limit(pLimit);
 
-            }
-            else
-            {
-                allProductsQuery = db.Collection("prodotto").StartAfter(pLimit);
+            //}
+            //else
+            //{
+            //    allProductsQuery = db.Collection("prodotto").StartAfter(pLimit);
 
-            }
+            //}
             if (!string.IsNullOrEmpty(product.categoria))
             {
                 allProductsQuery = allProductsQuery.WhereEqualTo("categoria", product.categoria);
@@ -221,7 +226,7 @@ namespace AbbigliamentoECommerceDB
                 product.nome = string.Empty;
             }
             QuerySnapshot allProductQuerySnapshot = await allProductsQuery.GetSnapshotAsync();
-            foreach (DocumentSnapshot documentSnapshot in allProductQuerySnapshot.Documents.Where(x => x.GetValue<string>("nome").Contains(product.nome)))
+            foreach (DocumentSnapshot documentSnapshot in allProductQuerySnapshot.Documents.Where(x => x.GetValue<string>("nome").ToLower().Contains(product.nome.ToLower())))
             {
                 Product wProd = new Product();
                 wProd.UId = documentSnapshot.Id;
@@ -239,23 +244,25 @@ namespace AbbigliamentoECommerceDB
             }
             return wListProd;
         }
+        //aggiunge un elemento al carrello
         public async Task<WriteResult> AddProductToCart(Product pProduct, string pUserUId, int pQuantitySelect)
         {
 
             FirestoreDb db = CreateInstanceDB();
             FirebaseApp wApp = CreateFirebaseApp();
 
-            //GetData
+         //per prima cosa viene recuperato il record User a cui è associato 
+         //un elemento di tipo Map relativo al carrello
             DocumentReference wDocRef = db.Collection("user").Document(pUserUId);
             DocumentSnapshot snapshot = await wDocRef.GetSnapshotAsync();
+            
             Dictionary<string, object> wMapCart = new Dictionary<string, object>();
             wMapCart.Add("quantita", pQuantitySelect);
             wMapCart.Add("uidProdotto", pProduct.UId);
 
             WriteResult wWResult = await wDocRef.UpdateAsync("carrello", FieldValue.ArrayUnion(wMapCart));
 
-            //End get Data
-
+            
             return wWResult;
         }
         public async Task<WriteResult> RemoveProductToCart(string pProductId, string pUserUId)
@@ -285,6 +292,8 @@ namespace AbbigliamentoECommerceDB
 
             return wWResult;
         }
+        //ad acquisto effettuato con successo verrà creato un record nel catalogo
+        //Acquisto con la copia del carrello e dei relativi prodotti acquistati.
         public async Task<WriteResult> AddHistoryBuy(List<Product> pProduct, string pUserUId, int pNumOrdine)
         {
 
@@ -296,7 +305,7 @@ namespace AbbigliamentoECommerceDB
             DocumentReference wDocRef = db.Collection("acquisto").Document();
             Dictionary<string, object> wAcquisto = new Dictionary<string, object>();
             Dictionary<string, object> wSingleProd = new Dictionary<string, object>();
-            int i = 1;
+            int i = 0;
             foreach (Product wProd in pProduct)
             {
                 Dictionary<string, object> wDictionaryProd = new Dictionary<string, object>
@@ -304,9 +313,10 @@ namespace AbbigliamentoECommerceDB
                     { "categoria",wProd.categoria },
                     { "marca",wProd.marca },
                     { "prezzo",wProd.prezzo },
+                     { "modello",wProd.modello },
                     { "nome",wProd.nome },
                     { "taglia",wProd.taglia },
-                    {"Quantity",wProd.Quantity },
+                    {"quantita",wProd.Quantity },
                 };
                 wSingleProd.Add(i.ToString(), wDictionaryProd);
                 i++;
@@ -319,6 +329,7 @@ namespace AbbigliamentoECommerceDB
 
             try
             {
+                //se la scrittura del record Acquisto viene effettuata correttamente
                 //Svuoto il carrello
                 foreach (Product wProd in pProduct)
                 {
@@ -373,13 +384,8 @@ namespace AbbigliamentoECommerceDB
             wCart.listProduct = new List<CartDetail>();
             try
             {
-
-                //Effettuo la login tramite email e password
-                //FirebaseAuthLink auth = await authProvider.SignInWithEmailAndPasswordAsync(pEmail, pPassword);
-
-                //recupero del uid utente per recuperare tutte le info del'utente loggato
-                //var decoded = await FirebaseAdmin.Auth.FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(auth.FirebaseToken);
-                //var uid = decoded.Uid;
+                
+                //uso il uid utente per recuperare tutte le info dell'utente loggato
                 DocumentReference wDocRef = db.Collection("user").Document(userId);
 
                 DocumentSnapshot snapshot = await wDocRef.GetSnapshotAsync();
@@ -424,7 +430,7 @@ namespace AbbigliamentoECommerceDB
             return wCart;
         }
 
-
+        //Metodo che effettua la login e verifica utenza di Firebase
         public async Task<AbbigliamentoECommerceEntity.User> SignIn(string pEmail, string pPassword)
         {
             FirestoreDb db = CreateInstanceDB();
@@ -523,30 +529,7 @@ namespace AbbigliamentoECommerceDB
             }
         }
 
-        public async Task<ResultStatics> StatisticsResult(FilterStatics pFilter, string pTableName)
-        {
-            FirebaseApp wApp = CreateFirebaseApp();
-            FirestoreDb db = CreateInstanceDB();
-            Query allProductsQuery = db.Collection(pTableName);
-            QuerySnapshot allProductQuerySnapshot = await allProductsQuery.GetSnapshotAsync();
-            foreach (DocumentSnapshot documentSnapshot in allProductQuerySnapshot.Documents)
-            {
-                if (documentSnapshot.Exists)
-                {
-
-                    Category wProd = new Category();
-                    wProd.Id = documentSnapshot.Id;
-                    wProd.Description = documentSnapshot.Id;
-
-
-                }
-                else
-                {
-
-                }
-            }
-            return null;
-        }
+        
     }
 
 }

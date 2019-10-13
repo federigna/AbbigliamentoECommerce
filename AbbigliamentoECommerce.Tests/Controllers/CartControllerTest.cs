@@ -24,17 +24,19 @@ namespace AbbigliamentoECommerce.Tests.Controllers
             userBL.SetGoogleCedential();
             var appSettings = ConfigurationManager.AppSettings;
             string wUrlPDF = appSettings["UlrPDF"];
-            FileStream wPFD = ManagementDocument.CreateOrderDocument(wUrlPDF, wNumOrder, await new CartBL().GetCartByUser("asfffkjoqejf9f"),
-               null);
-            //invio Mail
             bool sendEmail = false;
             try
             {
+                FileStream wPFD = ManagementDocument.CreateOrderDocument(wUrlPDF, wNumOrder, await new CartBL().GetCartByUser("asfffkjoqejf9f"),
+               null);
+            //invio Mail
+          
+            
                 string wEmail = "federigna@hotmail.it";
                 string wName = "fede";
                 string wsurname = "fede";
 
-                MailManagment.SendEmail(wPFD.Name, wEmail, wName, wsurname);
+                sendEmail= MailManagment.SendEmail(wPFD.Name, wEmail, wName, wsurname);
             }
             catch (Exception ex)
             {

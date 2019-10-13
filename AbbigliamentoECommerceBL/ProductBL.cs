@@ -12,8 +12,16 @@ namespace AbbigliamentoECommerceBL
     {
         public async Task InsertProduct(AbbigliamentoECommerceEntity.Product pProduct, string pToken)
         {
-            FirebaseManegment wDB = new FirebaseManegment();
-           await wDB.InsertProduct(pProduct,pToken);
+            try
+            {
+                FirebaseManegment wDB = new FirebaseManegment();
+                await wDB.InsertProduct(pProduct, pToken);
+            }
+            catch (Exception ex)
+            {
+                
+            }
+          
 
         }
 

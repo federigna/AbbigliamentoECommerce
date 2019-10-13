@@ -24,7 +24,7 @@
                         @Html.ActionLink(item.ProductName, "Detail", "Product", new { pId = item.Id }, null)
                     </dt>
                     <dt>
-                        @Html.DisplayFor(modelItem => item.Price)
+                        @Html.DisplayFor(modelItem => item.Price)€
                     </dt>
                     <dd>
                         @Html.DisplayFor(modelItem => item.Description)
@@ -32,15 +32,10 @@
                 </dl>
             </div>
         </div>
-        @*@Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id = item.Id })*@
 
     </fieldset>
 
 }
-@Html.ActionLink("<<", "Search", "Product", new { pPagePrev = pagePrev }, new { @class = "btn btn-default " })||
-@Html.ActionLink(">>", "Search", "Product", new { pPageSucc = pageSucc }, new { @class = "btn btn-default " })
 
 @if (Session["Ruolo"] != null && Session["Ruolo"].ToString() == "BackOffice")
 {

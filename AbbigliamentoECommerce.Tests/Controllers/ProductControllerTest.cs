@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AbbigliamentoECommerce.Controllers;
+using AbbigliamentoECommerce.Converter;
 using AbbigliamentoECommerce.Models;
 using AbbigliamentoECommerceBL;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -20,11 +21,10 @@ namespace AbbigliamentoECommerce.Tests.Controllers
             ProductController controller = new ProductController();
             UserBL userBL = new UserBL();
             userBL.SetGoogleCedential();
-            ViewResult result = await controller.Search(new Models.SearchProduct()) as ViewResult;
-            // Act
-            //ViewResult result = controller.Index() as ViewResult;
-            List<Product> wListProduct = result.Model != null ? result.Model as List<Product> : null;
-            // Assert
+            ProductBL wDB = new ProductBL();
+
+            List<Product> wListProduct = ProductEntityToProductModel.ConvertoListProdyctEntityTOListProductModel(await wDB.GetListProducts(ProductEntityToProductModel.ConvertoProdyctEntityTOSearchProductModel(new SearchProduct())));
+
             Assert.IsTrue(wListProduct.Count > 0);
         }
 
@@ -38,11 +38,10 @@ namespace AbbigliamentoECommerce.Tests.Controllers
             ProductController controller = new ProductController();
             Models.SearchProduct wFilter = new Models.SearchProduct();
             wFilter.Category = "Donna";
-            ViewResult result = await controller.Search(wFilter) as ViewResult;
-            // Act
-            //ViewResult result = controller.Index() as ViewResult;
-            List<Product> wListProduct = result.Model != null ? result.Model as List<Product> : null;
-            // Assert
+            ProductBL wDB = new ProductBL();
+
+            List<Product> wListProduct = ProductEntityToProductModel.ConvertoListProdyctEntityTOListProductModel(await wDB.GetListProducts(ProductEntityToProductModel.ConvertoProdyctEntityTOSearchProductModel(wFilter)));
+
             Assert.IsTrue(wListProduct.Count > 0);
         }
 
@@ -56,11 +55,10 @@ namespace AbbigliamentoECommerce.Tests.Controllers
             ProductController controller = new ProductController();
             Models.SearchProduct wFilter = new Models.SearchProduct();
             wFilter.Brand = "armani";
-            ViewResult result = await controller.Search(wFilter) as ViewResult;
-            // Act
-            //ViewResult result = controller.Index() as ViewResult;
-            List<Product> wListProduct = result.Model != null ? result.Model as List<Product> : null;
-            // Assert
+            ProductBL wDB = new ProductBL();
+
+            List<Product> wListProduct = ProductEntityToProductModel.ConvertoListProdyctEntityTOListProductModel(await wDB.GetListProducts(ProductEntityToProductModel.ConvertoProdyctEntityTOSearchProductModel(wFilter)));
+
             Assert.IsTrue(wListProduct.Count > 0);
         }
         [TestMethod]
@@ -73,11 +71,10 @@ namespace AbbigliamentoECommerce.Tests.Controllers
             ProductController controller = new ProductController();
             Models.SearchProduct wFilter = new Models.SearchProduct();
             wFilter.Model = "Gonna";
-            ViewResult result = await controller.Search(wFilter) as ViewResult;
-            // Act
-            //ViewResult result = controller.Index() as ViewResult;
-            List<Product> wListProduct = result.Model != null ? result.Model as List<Product> : null;
-            // Assert
+            ProductBL wDB = new ProductBL();
+
+            List<Product> wListProduct = ProductEntityToProductModel.ConvertoListProdyctEntityTOListProductModel(await wDB.GetListProducts(ProductEntityToProductModel.ConvertoProdyctEntityTOSearchProductModel(wFilter)));
+
             Assert.IsTrue(wListProduct.Count > 0);
         }
 
@@ -91,11 +88,10 @@ namespace AbbigliamentoECommerce.Tests.Controllers
             ProductController controller = new ProductController();
             Models.SearchProduct wFilter = new Models.SearchProduct();
             wFilter.Headmoney = "L";
-            ViewResult result = await controller.Search(wFilter) as ViewResult;
-            // Act
-            //ViewResult result = controller.Index() as ViewResult;
-            List<Product> wListProduct = result.Model != null ? result.Model as List<Product> : null;
-            // Assert
+            ProductBL wDB = new ProductBL();
+
+            List<Product> wListProduct = ProductEntityToProductModel.ConvertoListProdyctEntityTOListProductModel(await wDB.GetListProducts(ProductEntityToProductModel.ConvertoProdyctEntityTOSearchProductModel(wFilter)));
+           
             Assert.IsTrue(wListProduct.Count > 0);
         }
 
@@ -109,11 +105,9 @@ namespace AbbigliamentoECommerce.Tests.Controllers
             ProductController controller = new ProductController();
             Models.SearchProduct wFilter = new Models.SearchProduct();
             wFilter.Color = "Nero";
-            ViewResult result = await controller.Search(wFilter) as ViewResult;
-            // Act
-            //ViewResult result = controller.Index() as ViewResult;
-            List<Product> wListProduct = result.Model != null ? result.Model as List<Product> : null;
-            // Assert
+            ProductBL wDB = new ProductBL();
+            List<Product> wListProduct = ProductEntityToProductModel.ConvertoListProdyctEntityTOListProductModel(await wDB.GetListProducts(ProductEntityToProductModel.ConvertoProdyctEntityTOSearchProductModel(wFilter)));
+
             Assert.IsTrue(wListProduct.Count > 0);
         }
 
@@ -124,14 +118,12 @@ namespace AbbigliamentoECommerce.Tests.Controllers
             // Arrange
             UserBL userBL = new UserBL();
             userBL.SetGoogleCedential();
-            ProductController controller = new ProductController();
             Models.SearchProduct wFilter = new Models.SearchProduct();
             wFilter.ProductName = "polo";
-            ViewResult result = await controller.Search(wFilter) as ViewResult;
-            // Act
-            //ViewResult result = controller.Index() as ViewResult;
-            List<Product> wListProduct = result.Model != null ? result.Model as List<Product> : null;
-            // Assert
+            ProductBL wDB = new ProductBL();
+
+            List<Product> wListProduct = ProductEntityToProductModel.ConvertoListProdyctEntityTOListProductModel(await wDB.GetListProducts(ProductEntityToProductModel.ConvertoProdyctEntityTOSearchProductModel(wFilter)));
+
             Assert.IsTrue(wListProduct.Count > 0);
         }
 
@@ -142,17 +134,45 @@ namespace AbbigliamentoECommerce.Tests.Controllers
             // Arrange
             UserBL userBL = new UserBL();
             userBL.SetGoogleCedential();
-            ProductController controller = new ProductController();
             Models.SearchProduct wFilter = new Models.SearchProduct();
-            wFilter.Category = "donna";
+            wFilter.Category = "Donna";
             wFilter.Brand = "armani";
             wFilter.ProductName = "gonna";
+            ProductBL wDB = new ProductBL();
 
-            ViewResult result = await controller.Search(wFilter) as ViewResult;
-            // Act
-            //ViewResult result = controller.Index() as ViewResult;
-            List<Product> wListProduct = result.Model != null ? result.Model as List<Product> : null;
-            // Assert
+            List<Product> wListProduct = ProductEntityToProductModel.ConvertoListProdyctEntityTOListProductModel(await wDB.GetListProducts(ProductEntityToProductModel.ConvertoProdyctEntityTOSearchProductModel(wFilter)));
+
+            Assert.IsFalse(wListProduct.Count > 0);
+        }
+
+        [TestMethod]
+        //Filtri e premere CERCA
+        public async Task InsertProduct()
+        {
+            // Arrange
+            UserBL userBL = new UserBL();
+            userBL.SetGoogleCedential();
+            Models.Product wProdotto = new Models.Product();
+            wProdotto.Category = "Uomo";
+            wProdotto.Brand = "armani";
+            wProdotto.ProductName = "Pantalone";
+            wProdotto.Color = "Bianco";
+            wProdotto.Description = "pantalone bello";
+            wProdotto.Headmoney = "L";
+            wProdotto.Price = 60.00;
+            wProdotto.Quantity = 30;
+            wProdotto.Model = "Pantalone";
+            wProdotto.Image = @"C:\Users\feder\Desktop\Ingegneria del Software\pantalone bianco.png";
+            ProductBL wDB = new ProductBL();
+
+            await wDB.InsertProduct(ProductEntityToProductModel.ConvertoProdyctEntityTOProductModel(wProdotto),"");
+
+            Models.SearchProduct wFilter = new Models.SearchProduct();
+            wFilter.ProductName = "pantalone";
+
+            List<Product> wListProduct = ProductEntityToProductModel.ConvertoListProdyctEntityTOListProductModel(await wDB.GetListProducts(ProductEntityToProductModel.ConvertoProdyctEntityTOSearchProductModel(wFilter)));
+
+
             Assert.IsTrue(wListProduct.Count > 0);
         }
     }

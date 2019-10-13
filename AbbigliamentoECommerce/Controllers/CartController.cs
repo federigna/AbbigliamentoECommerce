@@ -133,6 +133,13 @@ namespace AbbigliamentoECommerce.Controllers
                     //CreatePayment function gives us the payment approval url
                     //on which payer is redirected for paypal account payment
                     wCart = ConvertEntityUserTOUserModel.ConvertoCartEntityTOCartModel(await new CartBL().GetCartByUser(wLogUser.wDetailUser.Id));
+
+                    if(wCart.DetailsCart.Count== 0)
+                    {
+                        ViewBag.ErrorMessage = "Non sono presenti articoli nel carrello";
+                        wCart.UserOwner = wLogUser.wDetailUser;
+                        return View("Details",wCart);
+                    }
                     wCart.NumOrder = new CartBL().GenerateNumOrder();
                     Session["NumOrder"] = wCart.NumOrder;
                     var createdPayment = this.CreatePayment(apiContext, baseURI + "guid=" + guid, wCart);

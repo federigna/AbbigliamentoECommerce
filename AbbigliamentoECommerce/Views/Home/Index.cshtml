@@ -1,6 +1,7 @@
 ﻿@model AbbigliamentoECommerce.Models.SearchProduct
 @{
     ViewBag.Title = "Home Page";
+    string wError = ViewBag.ErrorMessage;
     List<AbbigliamentoECommerce.Models.Product> wListproduct = (List<AbbigliamentoECommerce.Models.Product>)ViewBag.ListProducts ?? new List<AbbigliamentoECommerce.Models.Product>();
 }
 
@@ -63,6 +64,19 @@
                                 @class = "text-danger"
                             })
                         </dd>
+                        <br />
+                        <dt> @Html.DisplayNameFor(model => model.Category)</dt>
+                        <dd>
+                            @Html.DropDownListFor(model => model.Category,
+                                                                 new SelectList(Model.Categories.Select(x => new { Value = x.Description, Text = x.Description }),
+                                    "Value",
+                                    "Text", Model.Categories),
+                                                                 "Seleziona Categoria")
+                            @Html.ValidationMessageFor(model => model.Category, "", new
+                            {
+                                @class = "text-danger"
+                            })
+                        </dd>
                     </dl>
                 </div>
                 <div class="col-md-3">
@@ -121,3 +135,10 @@
     }
 
 </div>
+<script>
+     (function () {
+         if ('@wError' != '') {
+            alert('@wError');
+        }
+    })();
+</script>
